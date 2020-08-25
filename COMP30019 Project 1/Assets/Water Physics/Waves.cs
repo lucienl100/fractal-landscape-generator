@@ -7,18 +7,17 @@ public class Waves : MonoBehaviour
     // Start is called before the first frame update
     public int dim;
     public float scale;
-    [Serializable]
-    public struct WaveGenerator {
-        Vector2 speed;
-        Vector2 size;
-        float height;
-    }
     void Start()
     {
+        
         Mesh water = new Mesh();
-        water.name = waterMesh;
+        water.name = "waterMesh";
         water.vertices = GenVertices();
         water.triangles = GenTriangles(water);
+
+        MeshFilter meshFilter = this.gameObject.AddComponent<MeshFilter>();
+        meshFilter.mesh = water;
+        MeshRenderer renderer = this.gameObject.AddComponent<MeshRenderer>();
     }
 
     // Update is called once per frame
@@ -42,7 +41,7 @@ public class Waves : MonoBehaviour
     }
     private int[] GenTriangles(Mesh mesh)
     {
-        var triangles = new int[mesh.vertices * 6];
+        var triangles = new int[mesh.vertices.Length * 6];
         int idx = 0;
         for (int x = 0; x < dim; x++)
         {
@@ -53,20 +52,20 @@ public class Waves : MonoBehaviour
                 //|\
                 //| \
                 //|__\
-                triangles[idx] = (x * (dim + 1)) + z + 1
-                triangles[idx + 1] = (x + 1)*(dim + 1) + z
-                triangles[idx + 2] = (x * (dim + 1)) + z
+                triangles[idx] = (x * (dim + 1)) + z + 1;
+                triangles[idx + 1] = (x + 1)*(dim + 1) + z;
+                triangles[idx + 2] = (x * (dim + 1)) + z;
                 //Triangle 2
                 // __
                 //\  |
                 // \ |
                 //  \|
-                triangles[idx + 3] = (x * (dim + 1)) + z + 1
-                triangles[idx + 4] = ((x + 1) * (dim + 1)) + z + 1
-                triangles[idx + 5] = (x + 1)*(dim + 1) + z
+                triangles[idx + 3] = (x * (dim + 1)) + z + 1;
+                triangles[idx + 4] = ((x + 1) * (dim + 1)) + z + 1;
+                triangles[idx + 5] = (x + 1)*(dim + 1) + z;
                 idx += 6;
             }
-            return triangles;
         }
+        return triangles;
     }
 }
