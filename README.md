@@ -18,9 +18,12 @@ this is just an example of different formating tools available for you. For help
 
 | Name | Task | State |
 | :---         |     :---:      |          ---: |
-| Student Name 1  | MainScene     |  Done |
-| Student Name 2    | Vertex Shader      |  Testing |
-| Student Name 3    | README Format      |  Amazing! |
+| Nathan Rearick  | Diamond Square     |  0% |
+| Nathan Rearick  | Camera Movement     |  0% |
+| Lucien Lu    | Water      |  0% |
+| Lucien Lu    | Waves      |  0% |
+| Timmy Truong    | Shaders     |  0% |
+| Timmy Truong    | Sun     |  0% |
 
 ## General info
 This is project - 1 ...
