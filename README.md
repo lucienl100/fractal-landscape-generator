@@ -18,7 +18,7 @@ this is just an example of different formating tools available for you. For help
 
 | Name | Task | State |
 | :---         |     :---:      |          ---: |
-| Nathan Rearick  | Diamond Square     |  0% |
+| Nathan Rearick  | Diamond Square     |  ![0%](https://progress-bar.dev/50) |
 | Nathan Rearick  | Camera Movement     |  0% |
 | Lucien Lu    | Water      |  0% |
 | Lucien Lu    | Waves      |  0% |
