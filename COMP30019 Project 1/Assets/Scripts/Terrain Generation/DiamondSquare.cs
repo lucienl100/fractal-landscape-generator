@@ -23,41 +23,51 @@ public class DiamondSquare : MonoBehaviour
     void GenerateMesh()
 	{
         GenerateEmptyGrid();
+        DiamondSquareAlgorithm();
+        RemoveDebug();
 
-        //  Remove all children sphere for debug mode
-        foreach (Transform child in this.transform)
-		{
-            GameObject.Destroy(child.gameObject);
-		}
+	}
 
+    void DiamondSquareAlgorithm()
+	{
+        /*
+         * Uses the diamond square algorithm
+         * Sets the 4 corners of the grid to a random value
+         * Each time the code iterates through the i variable, there will be 2^i squares that the program will have to iterate through
+         * Each square is passed throught the Step method, which will then set the designated height values
+         */
         //  Set the corners
         SetHeight(new Vector2(0, 0), RandomHeight());
-        SetHeight(new Vector2(gridSize-1, 0), RandomHeight());
-        SetHeight(new Vector2(gridSize-1, gridSize-1), RandomHeight());
-        SetHeight(new Vector2(0, gridSize-1), RandomHeight());
+        SetHeight(new Vector2(gridSize - 1, 0), RandomHeight());
+        SetHeight(new Vector2(gridSize - 1, gridSize - 1), RandomHeight());
+        SetHeight(new Vector2(0, gridSize - 1), RandomHeight());
 
         variance = baseVariance;
         float maxV = gridSize - 1;
-        for(int i = 0; i < nValue; i++)
-		{
+        for (int i = 0; i < nValue; i++)
+        {
             int sqrtSquares = (int)Math.Pow(2, i);
             float divided = maxV / sqrtSquares;
             //  Run for each row of squares
-            for(int j=0; j<sqrtSquares; j++)
-			{
+            for (int j = 0; j < sqrtSquares; j++)
+            {
                 float y = j * divided;
                 //  Run for each column of squares
-                for(int k=0; k<sqrtSquares; k++)
-				{
+                for (int k = 0; k < sqrtSquares; k++)
+                {
                     float x = k * divided;
                     Vector2 p1 = new Vector2(x, y);
                     Vector2 p3 = new Vector2(x, y) + Vector2.one * divided;
-                    Debug.Log("Printing : x : " + p3.x + " : y : " + p3.y);
                     Step(p1, p3);
-				}
-			}
+                }
+            }
             LowerVariance();
-		}
+        }
+    }
+
+    void GenerateTriangles()
+	{
+
 	}
 
     void Step(Vector2 p1, Vector2 p3)
@@ -175,7 +185,7 @@ public class DiamondSquare : MonoBehaviour
     void LowerVariance()
 	{
         //  Lowers the variance
-        variance = variance * 0.95f;
+        variance = variance * 0.50f;
 	}
     void GenerateEmptyGrid()
 	{
@@ -201,7 +211,7 @@ public class DiamondSquare : MonoBehaviour
 		}
 	}
 
-    private void DebugGrid()
+    void DebugGrid()
 	{
         string message = "";
         //  Print the array
@@ -220,5 +230,14 @@ public class DiamondSquare : MonoBehaviour
             }
         }
         Debug.Log(message);
+    }
+
+    void RemoveDebug()
+	{
+        //  Remove all children sphere for debug mode
+        foreach (Transform child in this.transform)
+        {
+            GameObject.Destroy(child.gameObject);
+        }
     }
 }
