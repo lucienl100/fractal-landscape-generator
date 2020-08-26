@@ -419,7 +419,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dim: 20
-  scale: 1
+  scale: 3
+  waterTexture: {fileID: 2100000, guid: f237ca025dd73b444a9c0b2e8675f3f2, type: 2}
 --- !u!4 &1512205902
 Transform:
   m_ObjectHideFlags: 0

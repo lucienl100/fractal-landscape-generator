@@ -1,11 +1,4 @@
-﻿/*
- * 
- * 
- * Bro fix this code
- * 
- * 
- * 
- * using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -14,6 +7,7 @@ public class Waves : MonoBehaviour
     // Start is called before the first frame update
     public int dim;
     public float scale;
+    public Material waterTexture;
     void Start()
     {
         
@@ -25,6 +19,7 @@ public class Waves : MonoBehaviour
         MeshFilter meshFilter = this.gameObject.AddComponent<MeshFilter>();
         meshFilter.mesh = water;
         MeshRenderer renderer = this.gameObject.AddComponent<MeshRenderer>();
+        renderer.material = new Material(Shader.Find("Unlit/WaterShader"));
     }
 
     // Update is called once per frame
@@ -76,4 +71,3 @@ public class Waves : MonoBehaviour
         return triangles;
     }
 }
-*/
