@@ -16,6 +16,7 @@ public class DiamondSquareV2 : MonoBehaviour
     private Vector3[] verts;
     private int[] triangles;
     private Vector2[] uvs;
+    private int windowWidth = 9;
     private float maxHeight = 5.0f;
     // Start is called before the first frame update
     void Start()
@@ -39,6 +40,7 @@ public class DiamondSquareV2 : MonoBehaviour
 
         //  Go through each point and change the y coord using the Diamond Square Algorithm
         DiamondSquare();
+        MedianFilter();
         mesh.vertices = verts;
         mesh.triangles = triangles;
         mesh.uv = uvs;
@@ -84,7 +86,68 @@ public class DiamondSquareV2 : MonoBehaviour
         
         
 	}
+    void MedianFilter()
+    {
+        float[] newHeights = new float[gridSize * gridSize];
+        var window = new List<float>();
+        int edgeSizeX;
+        int edgeSizeY;
+        float newHeight;
+        int adjustedWindowWidthX;
+        int adjustedWindowWidthY;
+        for (int x = 0; x < gridSize; x++)
+        {
+            adjustedWindowWidthX = getAdjustedWindowWidth(x);
+            edgeSizeX = getEdgeSize(x);
+            for (int y = 0; y < gridSize; y++)
+            {
+                adjustedWindowWidthY = getAdjustedWindowWidth(y);
+                edgeSizeY = getEdgeSize(y);
+                for (int fx = 0; fx < adjustedWindowWidthX; fx++)
+                {
+                    for (int fy = 0; fy < adjustedWindowWidthY; fy++)
+                    {
+                        window.Add(GetHeight(new Vector2(x + fx - edgeSizeX, y + fy - edgeSizeY)));
+                    }
+                }
+                window.Sort();
+                newHeight = window[adjustedWindowWidthX * adjustedWindowWidthY / 2];
+                window.Clear();
+                newHeights[y * gridSize + x] = newHeight;
+            }
+        }
+        for (int y = 0; y < gridSize; y++)
+        {
+            for (int x = 0; x < gridSize; x++)
+            {
+                SetHeight(new Vector2(x, y), newHeights[y * gridSize + x]);
+            }
+        }
 
+    }
+    int getEdgeSize(int i)
+    {
+        if (i == 0)
+        {
+            return 0;
+        }
+        else if (i == gridSize - 1)
+        {
+            return windowWidth / 2;
+        }
+        int adjustedWindowWidthI = Mathf.Min(windowWidth, i + 1, gridSize - i + 1);
+        int edgeSizeI = (int)Mathf.Ceil((float)adjustedWindowWidthI / 2);
+        return edgeSizeI;
+    }
+    int getAdjustedWindowWidth(int i)
+    {
+        if (i == 0 || i == gridSize - 1)
+        {
+            return windowWidth / 2;
+        }
+        int adjustedWindowWidthI = Mathf.Min(windowWidth, i + 1, gridSize - i + 1);
+        return adjustedWindowWidthI;
+    }
     void DiamondSquare()
 	{
         /*
