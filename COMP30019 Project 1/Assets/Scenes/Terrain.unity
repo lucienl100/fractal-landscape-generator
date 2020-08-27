@@ -359,9 +359,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f9d66ca548bce64ebf975251f347313, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mDivisions: 64
-  mSize: 30
-  mHeight: 5
 --- !u!23 &1511379386
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -422,7 +419,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   baseMaxHeight: 5
-  nVal: 9
+  nVal: 8
   mapScalar: 30
   heightDecrement: 0.6
 --- !u!1 &1512205900
@@ -449,13 +446,13 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1512205900}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7c41ab21404488b498b578c4f9d2ff09, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   dim: 20
-  scale: 3
+  scale: 1
   waterTexture: {fileID: 2100000, guid: f237ca025dd73b444a9c0b2e8675f3f2, type: 2}
 --- !u!4 &1512205902
 Transform:
