@@ -19,7 +19,7 @@ this is just an example of different formating tools available for you. For help
 | Name | Task | State |
 | :---         |     :---:      |          ---: |
 | Nathan Rearick  | Diamond Square     |  ![95%](https://progress-bar.dev/95) |
-| Nathan Rearick  | Camera Movement     |  ![1.5%](https://progress-bar.dev/1.5) |
+| Nathan Rearick  | Camera Movement     |  ![1.5%](https://progress-bar.dev/2) |
 | Lucien Lu    | Water and Water Shader      |  ![95%](https://progress-bar.dev/95) |
 | Lucien Lu    | MedianFilter    |  ![95%](https://progress-bar.dev/95) |
 | Timmy Truong    | Shaders     |  ![0%](https://progress-bar.dev/0) |
