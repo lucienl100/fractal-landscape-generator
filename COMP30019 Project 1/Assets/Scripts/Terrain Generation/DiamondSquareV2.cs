@@ -13,25 +13,26 @@ public class DiamondSquareV2 : MonoBehaviour
     [Range(0.0f, 1.0f)] public float heightDecrement = 0.5f;
     private int gridSize;
     private Mesh mesh;
-    private Vector3[] verts;
+    private HeightGrid verts;
     private int[] triangles;
     private Vector2[] uvs;
     private int windowWidth = 9;
     private float maxHeight = 5.0f;
+    public MeshCollider meshCollider;
     // Start is called before the first frame update
     void Start()
     {
         
         gridSize = (int)Math.Pow(2, nVal) + 1;
-        verts = new Vector3[gridSize * gridSize];
         GenerateMesh();
     }
 
     void GenerateMesh()
 	{
         mesh = GetComponent<MeshFilter>().mesh;
+        meshCollider = GetComponent<MeshCollider>();
         mesh.indexFormat = UnityEngine.Rendering.IndexFormat.UInt32;
-        verts = new Vector3[gridSize * gridSize];
+        verts = new HeightGrid(gridSize);
         triangles = new int[gridSize * gridSize * 6];
         uvs = new Vector2[(int)Math.Pow(gridSize, 2)];
         maxHeight = baseMaxHeight;
@@ -41,17 +42,19 @@ public class DiamondSquareV2 : MonoBehaviour
         //  Go through each point and change the y coord using the Diamond Square Algorithm
         DiamondSquare();
         MedianFilter();
-        mesh.vertices = verts;
+        mesh.vertices = verts.GetGrid();
         mesh.triangles = triangles;
         mesh.uv = uvs;
         mesh.RecalculateBounds();
         mesh.RecalculateNormals();
+        meshCollider.sharedMesh = mesh;
     }
     void GenerateVertsTriangles()
 	{
         //  Creates all of the verticies, triangles
         //  Allows for us to change the x/z distance between points
         float dIncrement = mapScalar / gridSize;
+        verts.SetScale(dIncrement);
         int triIndex = 0;
 
         for (int i = 0; i < gridSize; i++)
@@ -79,7 +82,7 @@ public class DiamondSquareV2 : MonoBehaviour
                     triangles[triIndex + 5] = i * gridSize + j + 1;
                     triIndex += 6;
                 }
-                verts[(i * gridSize) + j] = new Vector3(j, 0.0f, i) * dIncrement;
+                verts.SetVector(j, i, new Vector3(j, 0.0f, i) * dIncrement);
                 uvs[(i * gridSize) + j] = new Vector2((float)j / (gridSize - 1), (float)i / (gridSize - 1));
 			}
         }
@@ -95,6 +98,8 @@ public class DiamondSquareV2 : MonoBehaviour
         float newHeight;
         int adjustedWindowWidthX;
         int adjustedWindowWidthY;
+		HeightGrid copy = verts.Copy();
+
         for (int x = 0; x < gridSize; x++)
         {
             adjustedWindowWidthX = getAdjustedWindowWidth(x);
@@ -107,23 +112,16 @@ public class DiamondSquareV2 : MonoBehaviour
                 {
                     for (int fy = 0; fy < adjustedWindowWidthY; fy++)
                     {
-                        window.Add(GetHeight(new Vector2(x + fx - edgeSizeX, y + fy - edgeSizeY)));
+                        window.Add(copy.GetHeight(new Vector2(x + fx - edgeSizeX, y + fy - edgeSizeY)));
                     }
                 }
                 window.Sort();
                 newHeight = window[adjustedWindowWidthX * adjustedWindowWidthY / 2];
+                verts.SetHeight(new Vector2(x, y), newHeight);
                 window.Clear();
                 newHeights[y * gridSize + x] = newHeight;
             }
         }
-        for (int y = 0; y < gridSize; y++)
-        {
-            for (int x = 0; x < gridSize; x++)
-            {
-                SetHeight(new Vector2(x, y), newHeights[y * gridSize + x]);
-            }
-        }
-
     }
     int getEdgeSize(int i)
     {
@@ -168,7 +166,7 @@ public class DiamondSquareV2 : MonoBehaviour
         
         foreach (Vector2 v in vs)
         {
-            SetHeight(v, RandomInitialHeight());
+           verts.SetHeight(v, RandomInitialHeight());
         }
         LowerHeight();
         for(int i = 0; i < nVal; i++)
@@ -209,7 +207,7 @@ public class DiamondSquareV2 : MonoBehaviour
          */
 
         Vector2 mp = (p1 + p3) / 2;
-        SetHeight(mp, AverageHeight(mp, p1) + RandomHeight());
+        verts.SetHeight(mp, AverageHeight(mp, p1) + RandomHeight());
 
         /*  Square step
         *
@@ -238,7 +236,7 @@ public class DiamondSquareV2 : MonoBehaviour
 
         foreach (Vector2 v in diamondCorners)
         {
-            SetHeight(v, AverageHeight(v, mp) + RandomHeight());
+            verts.SetHeight(v, AverageHeight(v, mp) + RandomHeight());
         }
     }
 
@@ -264,7 +262,7 @@ public class DiamondSquareV2 : MonoBehaviour
             Vector2 tempV = mp + v * pV;
             if (inBounds(tempV))
 			{
-                sum += GetHeight(tempV);
+                sum += verts.GetHeight(tempV);
                 count++;
 			}
 		}
@@ -301,17 +299,6 @@ public class DiamondSquareV2 : MonoBehaviour
         maxHeight *= heightDecrement;
 	}
 
-    void SetHeight(Vector2 v, float h)
-	{
-        //  Sets the height of a vector3 by a given vector2 (x, z), (y) => (x, y, z)
-        verts[gridSize * (int)v.y + (int)v.x].y = h;
-	}
-
-    float GetHeight(Vector2 v)
-	{
-        //  Returns the height of a given Vector2 from its respective Vector3 in verts
-        return verts[gridSize * (int)v.y + (int)v.x].y;
-	}
     // Update is called once per frame
     void Update()
     {
