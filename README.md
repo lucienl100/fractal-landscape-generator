@@ -20,8 +20,8 @@ this is just an example of different formating tools available for you. For help
 | :---         |     :---:      |          ---: |
 | Nathan Rearick  | Diamond Square     |  ![0%](https://progress-bar.dev/0) |
 | Nathan Rearick  | Camera Movement     |  ![0%](https://progress-bar.dev/0) |
-| Lucien Lu    | Water      |  ![0%](https://progress-bar.dev/0) |
-| Lucien Lu    | Waves      |  ![0%](https://progress-bar.dev/0) |
+| Lucien Lu    | Water and Water Shader      |  ![0%](https://progress-bar.dev/0) |
+| Lucien Lu    | MedianFilter    |  ![0%](https://progress-bar.dev/0) |
 | Timmy Truong    | Shaders     |  ![0%](https://progress-bar.dev/0) |
 | Timmy Truong    | Sun     |  ![0%](https://progress-bar.dev/0) |
 
