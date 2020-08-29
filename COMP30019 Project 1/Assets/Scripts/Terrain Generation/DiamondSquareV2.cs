@@ -17,18 +17,15 @@ public class DiamondSquareV2 : MonoBehaviour
     private int[] triangles;
     private Vector2[] uvs;
     private int windowWidth = 9;
+    private float maxHeightStatic = 5.0f;
     private float maxHeight = 5.0f;
     public MeshCollider meshCollider;
+    public bool UseMedianFilter = true;
+    private bool hasLoaded = false;
     // Start is called before the first frame update
     void Start()
     {
-        
         gridSize = (int)Math.Pow(2, nVal) + 1;
-        GenerateMesh();
-    }
-
-    void GenerateMesh()
-	{
         mesh = GetComponent<MeshFilter>().mesh;
         meshCollider = GetComponent<MeshCollider>();
         mesh.indexFormat = UnityEngine.Rendering.IndexFormat.UInt32;
@@ -36,12 +33,25 @@ public class DiamondSquareV2 : MonoBehaviour
         triangles = new int[gridSize * gridSize * 6];
         uvs = new Vector2[(int)Math.Pow(gridSize, 2)];
         maxHeight = baseMaxHeight;
+        hasLoaded = true;
+        GenerateMesh();
+    }
+    void Update() {
+        if (Input.GetKeyDown(KeyCode.Space) && hasLoaded)
+        {
+            maxHeight = maxHeightStatic;
+            GenerateMesh();
+        }
+    }
+    void GenerateMesh()
+	{
+        
         //  Generate x and z coords for all points in the grid, connect triangles with each other
         GenerateVertsTriangles();
 
         //  Go through each point and change the y coord using the Diamond Square Algorithm
         DiamondSquare();
-        MedianFilter();
+        if (UseMedianFilter) { MedianFilter(); }
         mesh.vertices = verts.GetGrid();
         mesh.triangles = triangles;
         mesh.uv = uvs;
@@ -91,7 +101,8 @@ public class DiamondSquareV2 : MonoBehaviour
 	}
     void MedianFilter()
     {
-        float[] newHeights = new float[gridSize * gridSize];
+        //Uses the median filter algorithm to smooth out terrain and eliminate
+        //spikiness of terrain.
         var window = new List<float>();
         int edgeSizeX;
         int edgeSizeY;
@@ -102,24 +113,29 @@ public class DiamondSquareV2 : MonoBehaviour
 
         for (int x = 0; x < gridSize; x++)
         {
+            //Find the x dimensions of the check rectangle around the current x
+            //to store vertices.
             adjustedWindowWidthX = getAdjustedWindowWidth(x);
             edgeSizeX = getEdgeSize(x);
             for (int y = 0; y < gridSize; y++)
             {
+                //Find the y dimensions of the check rectangle around the 
+                //current y to store vertices.
                 adjustedWindowWidthY = getAdjustedWindowWidth(y);
                 edgeSizeY = getEdgeSize(y);
                 for (int fx = 0; fx < adjustedWindowWidthX; fx++)
                 {
                     for (int fy = 0; fy < adjustedWindowWidthY; fy++)
                     {
+                        //Store each vertex in the check region to the window.
                         window.Add(copy.GetHeight(new Vector2(x + fx - edgeSizeX, y + fy - edgeSizeY)));
                     }
                 }
+                //Sort the window and get the middle element/median.
                 window.Sort();
                 newHeight = window[adjustedWindowWidthX * adjustedWindowWidthY / 2];
-                verts.SetHeight(new Vector2(x, y), newHeight);
+                verts.SetHeight(new Vector2(x,y), newHeight);
                 window.Clear();
-                newHeights[y * gridSize + x] = newHeight;
             }
         }
     }
@@ -206,7 +222,7 @@ public class DiamondSquareV2 : MonoBehaviour
          * Then, calculate the height of the midpoint by getting the averages of the four corners, and adding a random value
          */
 
-        Vector2 mp = (p1 + p3) / 2;
+        Vector2 mp = (p1 + p3) * 0.5f;
         verts.SetHeight(mp, AverageHeight(mp, p1) + RandomHeight());
 
         /*  Square step
@@ -248,18 +264,16 @@ public class DiamondSquareV2 : MonoBehaviour
         //  Get the position vector between the mid point and the corner point
         Vector2 pV = mp - corner;
 
-        Vector2[] transformations = new[]
+        float[] angles = new[]
         {
-            new Vector2(1, 1),
-            new Vector2(1, -1),
-            new Vector2(-1 , -1),
-            new Vector2(-1, -1)
+            0f, Mathf.PI * 0.5f, Mathf.PI, Mathf.PI * 1.5f
         };
         
 
-        foreach (Vector2 v in transformations)
+        foreach (float theta in angles)
         {
-            Vector2 tempV = mp + v * pV;
+            Vector2 translation = new Vector2(Mathf.Round((pV.x * Mathf.Cos(theta)) - (pV.y * Mathf.Sin(theta))), Mathf.Round((pV.x * Mathf.Sin(theta)) + (pV.y * Mathf.Cos(theta))));
+            Vector2 tempV = mp + translation;
             if (inBounds(tempV))
 			{
                 sum += verts.GetHeight(tempV);
@@ -298,13 +312,4 @@ public class DiamondSquareV2 : MonoBehaviour
         //  Lowers the max height by multiplying by the scalar, heightDecrement
         maxHeight *= heightDecrement;
 	}
-
-    // Update is called once per frame
-    void Update()
-    {
-		if (Input.GetKeyDown(KeyCode.Space))
-		{
-            GenerateMesh();
-		}
-    }
 }
