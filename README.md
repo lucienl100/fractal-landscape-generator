@@ -41,6 +41,46 @@ Project is created with:
 You can include a code snippet here, but make sure to explain it! 
 Do not just copy all your code, only explain the important parts.
 
+A single method was used to find the average height of related points:
+Get the displacement vector between the point of interest and another point which is the based midpoint in the case of a square step, then perform a rotation for 0, 90, 180, 270 degrees on the displacement vector, this will get the four/three points that enclose the point and check if each point is in the grid: at most there will be one missing. Then find the average of these points and assign it to the point of interest. 
+
+Code:
+
+```c#
+    float AverageHeight(Vector2 pV, Vector2 mp)
+	{
+        float sum = 0;
+        int count = 0;
+
+        //  Get the displacement vector between the mid point and the corner point
+        Vector2 dV = pV - mp;
+
+        float[] angles = new[] {
+            0f, Mathf.PI * 0.5f, Mathf.PI, Mathf.PI * 1.5f
+        };
+        foreach (float theta in angles)
+        {
+            Vector2 translation = rotateVector(dV, theta);
+            Vector2 newV = pV + translation;
+            if (inBounds(newV))
+			{
+                sum += verts.GetHeight(newV);
+                count++;
+			}
+		}
+        if(count == 0)
+		{
+            return 0;
+		}
+        return sum / count;
+	}
+    Vector2 rotateVector(Vector2 v, float theta)
+    {
+        return new Vector2(Mathf.Round((v.x * Mathf.Cos(theta)) - (v.y * Mathf.Sin(theta))), 
+            Mathf.Round((v.x * Mathf.Sin(theta)) + (v.y * Mathf.Cos(theta))));
+    }
+ ```
+ 
 ```c#
 public class meshGenerator : MonoBehaviour
 {
