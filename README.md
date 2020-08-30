@@ -13,6 +13,7 @@ this is just an example of different formating tools available for you. For help
 * [Diamond-Square implementation](#diamond-square-implementation)
 * [Camera Motion](#camera-motion)
 * [Vertex Shader](#vertex-shader)
+* [Median Filter](#median-filter)
 
 ## Team Members
 
@@ -80,3 +81,52 @@ You can use emojis :+1: but do not over use it, we are looking for professional 
 - [ ] Camera motion 
 - [ ] Surface properties
 - [ ] Project organisation and documentation
+
+## Median Filter
+
+We decided to add an optional Median Filter to the terrain generation. This will increase computation time and loading time by approximately 1 second but results in a much smoother surface.
+<p align="left">
+  <img src="Gifs/nomedianfilter"  width="300" >
+</p>
+<p align="right">
+  <img src="Gifs/medianfilter"  width="300" >
+</p>
+```c
+void MedianFilter()
+    {
+        var window = new List<float>();
+        float newHeight;
+
+        int checkWindowOffsetX;
+        int checkWindowOffsetY;
+        
+        int adjustedWindowWidthX;
+        int adjustedWindowWidthY;
+
+		HeightGrid copy = verts.Copy();
+
+        for (int x = 0; x < gridSize; x++)
+        {
+            adjustedWindowWidthX = GetAdjustedWindowWidth(x);
+            checkWindowOffsetX = GetWindowOffset(x);
+            for (int y = 0; y < gridSize; y++)
+            {
+                adjustedWindowWidthY = GetAdjustedWindowWidth(y);
+                checkWindowOffsetY = GetWindowOffset(y);
+                for (int fx = 0; fx < adjustedWindowWidthX; fx++)
+                {
+                    for (int fy = 0; fy < adjustedWindowWidthY; fy++)
+                    {
+                        window.Add(copy.GetHeight(new Vector2(x + fx - checkWindowOffsetX, y + fy - checkWindowOffsetY)));
+                    }
+                }
+                window.Sort();
+                newHeight = window[adjustedWindowWidthX * adjustedWindowWidthY / 2];
+
+                verts.SetHeight(new Vector2(x, y), newHeight);
+                
+                window.Clear();
+            }
+        }
+    }
+```
