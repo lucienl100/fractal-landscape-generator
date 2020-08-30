@@ -91,6 +91,7 @@ We decided to add an optional Median Filter to the terrain generation. This will
 <p align="right">
   <img src="Gifs/medianfilter"  width="300" >
 </p>
+
 ```c#
 void MedianFilter()
     {
