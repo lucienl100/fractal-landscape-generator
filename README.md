@@ -22,7 +22,8 @@ this is just an example of different formating tools available for you. For help
 | Nathan Rearick  | Diamond Square     |  ![95%](https://progress-bar.dev/95) |
 | Nathan Rearick  | Camera Movement     |  ![95%](https://progress-bar.dev/95) |
 | Lucien Lu    | Water and Water Shader      |  ![95%](https://progress-bar.dev/95) |
-| Lucien Lu    | MedianFilter    |  ![95%](https://progress-bar.dev/95) |
+| Lucien Lu    | Scene Manager    |  ![95%](https://progress-bar.dev/95) |
+| Lucien Lu    | Median Filter    |  ![95%](https://progress-bar.dev/95) |
 | Timmy Truong    | Shaders     |  ![0%](https://progress-bar.dev/0) |
 | Timmy Truong    | Sun     |  ![0%](https://progress-bar.dev/0) |
 
