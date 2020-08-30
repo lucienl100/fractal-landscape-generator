@@ -5,27 +5,29 @@ using UnityEngine;
 public class Waves : MonoBehaviour
 {
     // Start is called before the first frame update
-    public int dim;
-    public float scale;
+    public int dim = 128;
+    public float scale = 1;
+    private float waterLevel = -1f;
     public Material waterTexture;
+    Mesh water;
     void Start()
     {
         
-        Mesh water = new Mesh();
+        water = new Mesh();
         water.name = "waterMesh";
-        water.vertices = GenVertices();
-        water.triangles = GenTriangles(water);
-
         MeshFilter meshFilter = this.gameObject.AddComponent<MeshFilter>();
         meshFilter.mesh = water;
         MeshRenderer renderer = this.gameObject.AddComponent<MeshRenderer>();
         renderer.material = new Material(Shader.Find("Unlit/WaterShader"));
     }
-
-    // Update is called once per frame
-    void Update()
+    public void GenMesh()
     {
-        
+        water.vertices = GenVertices();
+        water.triangles = GenTriangles(water);
+    }
+    public void SetHeight(float height)
+    {
+        waterLevel = height;
     }
     private Vector3[] GenVertices()
     {
@@ -35,7 +37,7 @@ public class Waves : MonoBehaviour
         {
             for (int z = 0; z < dim + 1; z++)
             {
-                vertices[idx] = new Vector3((float)x * scale, 0, (float)z * scale);
+                vertices[idx] = new Vector3((float)x * scale, waterLevel, (float)z * scale);
                 idx++;
             }
         }
