@@ -16,6 +16,16 @@ public class HeightGrid
 		this.grid = new Vector3[size * size];
 		this.size = size;
 	}
+	public float GetAvgHeight()
+    {
+        float sum = 0;
+        for (int i = 0; i < grid.Length; i+=4)
+		{
+			sum += grid[i].y;
+        }
+        float avg = sum / grid.Length * 4;
+        return avg;
+    }
 
 	public float GetHeight(Vector2 v)
 	{

@@ -1,25 +1,22 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Numerics;
 using UnityEngine;
 using Vector3 = UnityEngine.Vector3;
 
 public class CameraMovement : MonoBehaviour
 {
-    public float speed = 5.0f;
-	public float sprintMultiplier = 1.5f;
+    public float speed = 10.0f;
+	public float sprintMultiplier = 5.0f;
 	public Transform player;
-	public GameObject terrainGenerator;
 	public new Camera camera;
 	public LayerMask layerMask;
 	public bool test;
 	public float collisionMultiplier;
-	
-	private float nextVertHeight;
-	HeightGrid verts;
     // Start is called before the first frame update
     void Start()
     {
-       
+        
     }
 
     // Update is called once per frame
@@ -49,7 +46,6 @@ public class CameraMovement : MonoBehaviour
 			velocity *= sprintMultiplier;
 		}
 		Vector3 dPosition = velocity * Time.deltaTime * speed;
-		List<Ray> rays = new List<Ray>();
 		//rays.Add(new Ray(player.position, velocity));
 		//rays.Add(new Ray(player.position, new Vector3(velocity.x, velocity.y - 1, velocity.z)));
 		//rays.Add(new Ray(player.position, new Vector3(velocity.x - 1, velocity.y - 1, velocity.z)));
