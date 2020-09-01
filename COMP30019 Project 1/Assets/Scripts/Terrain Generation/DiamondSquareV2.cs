@@ -9,22 +9,25 @@ public class DiamondSquareV2 : MonoBehaviour
 {
     public float baseMaxHeight = 10.0f;
     [Range(2, 20)] public int nVal = 6;
-    [Range(1.0f, 257.0f)] public float mapScalar = 257.0f;
+    [Range(1.0f, 256.0f)] public float mapScalar = 192.0f;
     [Range(0.0f, 1.0f)] public float heightDecrement = 0.5f;
     private int gridSize;
+    private float highestCornerHeight;
     private Mesh mesh;
+    private Transform generator;
     private HeightGrid verts;
     private int[] triangles;
     private Vector2[] uvs;
     private int windowWidth = 9;
-    private float maxHeight = 10.0f;
+    private float maxHeight;
+    public float randomTHeight;
     public MeshCollider meshCollider;
     public Material material;
     public bool useMedianFilter = true;
     // Start is called before the first frame update
     void Start()
     {
-        
+        generator = GetComponent<Transform>();
         gridSize = (int)Math.Pow(2, nVal) + 1;
         mesh = GetComponent<MeshFilter>().mesh;
         meshCollider = GetComponent<MeshCollider>();
@@ -34,13 +37,17 @@ public class DiamondSquareV2 : MonoBehaviour
         verts = new HeightGrid(gridSize);
         triangles = new int[gridSize * gridSize * 6];
         uvs = new Vector2[(int)Math.Pow(gridSize, 2)];
+        maxHeight = baseMaxHeight;
         GenerateMesh();
     }
     public float GetAvgHeight()
     {
         return verts.GetAvgHeight();
     }
-    
+    public float GetGridSize()
+    {
+        return verts.GetGridSize();
+    }
     public void GenerateMesh()
 	{
         maxHeight = baseMaxHeight;
@@ -57,13 +64,14 @@ public class DiamondSquareV2 : MonoBehaviour
         mesh.RecalculateBounds();
         mesh.RecalculateNormals();
         meshCollider.sharedMesh = mesh;
-        Debug.Log("Diamond Square : " + GetAvgHeight());
+        randomTHeight = Rand(baseMaxHeight * 0.1f) - 0.5f * highestCornerHeight;
+        generator.position = new Vector3(0f, randomTHeight, 0f);
     }
     void GenerateVertsTriangles()
 	{
         //  Creates all of the verticies, triangles
         //  Allows for us to change the x/z distance between points
-        float dIncrement = 0.5f * mapScalar / (gridSize - 1);
+        float dIncrement = mapScalar / (gridSize - 1); //  192 
         verts.SetScale(dIncrement);
         int triIndex = 0;
 
@@ -181,6 +189,7 @@ public class DiamondSquareV2 : MonoBehaviour
         {
            verts.SetHeight(v, RandomInitialHeight());
         }
+        highestCornerHeight = Mathf.Max(vs[0].y, vs[1].y, vs[2].y, vs[3].y);
         LowerHeight();
         for(int i = 0; i < nVal; i++)
 		{
@@ -253,24 +262,24 @@ public class DiamondSquareV2 : MonoBehaviour
         }
     }
 
-    float AverageHeight(Vector2 mp, Vector2 corner)
+    float AverageHeight(Vector2 pV, Vector2 mp)
 	{
         float sum = 0;
         int count = 0;
 
-        //  Get the position vector between the mid point and the corner point
-        Vector2 pV = mp - corner;
+        //  Get the displacement vector between the mid point and the corner point
+        Vector2 dV = pV - mp;
 
         float[] angles = new[] {
             0f, Mathf.PI * 0.5f, Mathf.PI, Mathf.PI * 1.5f
         };
         foreach (float theta in angles)
         {
-            Vector2 translation = new Vector2(Mathf.Round((pV.x * Mathf.Cos(theta)) - (pV.y * Mathf.Sin(theta))), Mathf.Round((pV.x * Mathf.Sin(theta)) + (pV.y * Mathf.Cos(theta))));
-            Vector2 tempV = mp + translation;
-            if (inBounds(tempV))
+            Vector2 translation = rotateVector(dV, theta);
+            Vector2 newV = pV + translation;
+            if (inBounds(newV))
 			{
-                sum += verts.GetHeight(tempV);
+                sum += verts.GetHeight(newV);
                 count++;
 			}
 		}
@@ -280,7 +289,11 @@ public class DiamondSquareV2 : MonoBehaviour
 		}
         return sum / count;
 	}
-
+    Vector2 rotateVector(Vector2 v, float theta)
+    {
+        return new Vector2(Mathf.Round((v.x * Mathf.Cos(theta)) - (v.y * Mathf.Sin(theta))), 
+            Mathf.Round((v.x * Mathf.Sin(theta)) + (v.y * Mathf.Cos(theta))));
+    }
     bool inBounds(Vector2 v)
 	{
         //  Checks if the point is in the bounds of the grid
@@ -306,4 +319,8 @@ public class DiamondSquareV2 : MonoBehaviour
         //  Lowers the max height by multiplying by the scalar, heightDecrement
         maxHeight *= heightDecrement;
 	}
+    float Rand(float range)
+    {
+        return Random.Range(-range, range);
+    }
 }

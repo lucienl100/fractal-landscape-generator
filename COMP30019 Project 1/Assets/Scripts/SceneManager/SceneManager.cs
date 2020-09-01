@@ -1,10 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using Random = UnityEngine.Random;
 public class SceneManager : MonoBehaviour
 {
     // Start is called before the first frame update
+    private float randHeightDiff = 1.5f;
+    private float terrainMaxHeight;
+    private float terrainMaxHeightCheckDist = 5f;
     public GameObject terrainGenerator;
     public Transform player;
     public GameObject water;
@@ -15,7 +18,7 @@ public class SceneManager : MonoBehaviour
     Transform tT;
     private bool isLoading = true;
     private bool firstFrame = true;
-    private Vector3 playerStartingPos = new Vector3(10f, 40f, 10f);
+    private Vector3 playerStartingPos = new Vector3(10f, 80f, 10f);
     void Start()
     {
         
@@ -26,13 +29,15 @@ public class SceneManager : MonoBehaviour
     {
         if (firstFrame)
         {
+            
             wT = water.GetComponent<Transform>();
             tT = terrainGenerator.GetComponent<Transform>();
             ds = terrainGenerator.GetComponent<DiamondSquareV2>();
             wv = water.GetComponent<Waves>();
 
+            terrainMaxHeight = ds.baseMaxHeight;
             tT.position = new Vector3(0f, 0f, 0f);
-            wT.position = new Vector3(0f, ds.GetAvgHeight(), 0f);
+            wT.position = new Vector3(0f, ds.GetAvgHeight() + rand(randHeightDiff), 0f);
             player.position = playerStartingPos;
             isLoading = false;
             firstFrame = false;
@@ -40,13 +45,17 @@ public class SceneManager : MonoBehaviour
         if(Input.GetKeyDown(KeyCode.Space) && isLoading == false)
         {
                 isLoading = true;
-                player.position = playerStartingPos;
+                
                 ds.GenerateMesh();
-                Debug.Log("SceneManager : " + ds.GetAvgHeight());
-                wT.position = new Vector3(0f, ds.GetAvgHeight(), 0f);
+                player.position = new Vector3(playerStartingPos.x, 1.1f * (ds.GetAvgHeight()), playerStartingPos.z);
+                wT.position = new Vector3(0f, ds.GetAvgHeight() + ds.randomTHeight + rand(randHeightDiff), 0f);
                 wv.GenMesh();
                 isLoading = false;
         }
+    }
+    private float rand(float range)
+    {
+        return Random.Range(-range, range);
     }
     private IEnumerator WaitForInit()
     {

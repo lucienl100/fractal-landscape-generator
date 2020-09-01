@@ -16,6 +16,10 @@ public class HeightGrid
 		this.grid = new Vector3[size * size];
 		this.size = size;
 	}
+	public int GetGridSize()
+	{
+		return size;
+	}
 	public float GetAvgHeight()
     {
         float sum = 0;

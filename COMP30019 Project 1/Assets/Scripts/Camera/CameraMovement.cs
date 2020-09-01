@@ -39,6 +39,14 @@ public class CameraMovement : MonoBehaviour
 		{
 			velocity += transform.right;
 		}
+		if (Input.GetKey(KeyCode.C))
+		{
+			velocity += transform.up;
+		}
+		if (Input.GetKey(KeyCode.Z))
+		{
+			velocity += -transform.up;
+		}
 		
 		velocity.Normalize();
 		if (Input.GetKey(KeyCode.LeftShift))
@@ -46,37 +54,8 @@ public class CameraMovement : MonoBehaviour
 			velocity *= sprintMultiplier;
 		}
 		Vector3 dPosition = velocity * Time.deltaTime * speed;
-		//rays.Add(new Ray(player.position, velocity));
-		//rays.Add(new Ray(player.position, new Vector3(velocity.x, velocity.y - 1, velocity.z)));
-		//rays.Add(new Ray(player.position, new Vector3(velocity.x - 1, velocity.y - 1, velocity.z)));
-		//rays.Add(new Ray(player.position, new Vector3(velocity.x - 1, velocity.y - 1, velocity.z - 1)));
-		//rays.Add(new Ray(player.position, new Vector3(velocity.x + 1, velocity.y - 1, velocity.z - 1)));
-		//rays.Add(new Ray(player.position, new Vector3(velocity.x + 1, velocity.y - 1, velocity.z + 1)));
-		//rays.Add(new Ray(player.position, new Vector3(velocity.x - 1, velocity.y - 1, velocity.z + 1)));
-		//rays.Add(new Ray(player.position, new Vector3(velocity.x, velocity.y - 1, velocity.z - 1)));
-		//rays.Add(new Ray(player.position, new Vector3(velocity.x - 1, velocity.y - 1, velocity.z)));
-		//rays.Add(new Ray(player.position, new Vector3(velocity.x, velocity.y - 1, velocity.z + 1)));
-		//rays.Add(new Ray(player.position, new Vector3(velocity.x + 1, velocity.y - 1, velocity.z)));
-		//Debug.DrawRay(player.position, velocity, Color.red);
-		//Debug.DrawRay(player.position, new Vector3(velocity.x, velocity.y - 1, velocity.z), Color.red);
-		//Debug.DrawRay(player.position, new Vector3(velocity.x - 1, velocity.y - 1, velocity.z), Color.red);
-		//Debug.DrawRay(player.position, new Vector3(velocity.x - 1, velocity.y - 1, velocity.z - 1), Color.red);
-		//Debug.DrawRay(player.position, new Vector3(velocity.x + 1, velocity.y - 1, velocity.z - 1), Color.red);
-		//Debug.DrawRay(player.position, new Vector3(velocity.x + 1, velocity.y - 1, velocity.z + 1), Color.red);
-		//Debug.DrawRay(player.position, new Vector3(velocity.x - 1, velocity.y - 1, velocity.z + 1), Color.red);
-		//Debug.DrawRay(player.position, new Vector3(velocity.x, velocity.y - 1, velocity.z - 1), Color.red);
-		//Debug.DrawRay(player.position, new Vector3(velocity.x - 1, velocity.y - 1, velocity.z), Color.red);
-		//Debug.DrawRay(player.position, new Vector3(velocity.x, velocity.y - 1, velocity.z + 1), Color.red);
-		//Debug.DrawRay(player.position, new Vector3(velocity.x + 1, velocity.y - 1, velocity.z), Color.red);
-		//foreach(Ray ray in rays)
-		//{
-		//	if(Physics.Raycast(ray, dPosition.magnitude * collisionMultiplier, layerMask))
-		//	{
-		//	dPosition *= 0;
-		//	}
-		//}
 		float i = 0.001f;
-		while(Physics.CheckSphere((player.position + dPosition * 3f), 0.5f))
+		while(Physics.CheckSphere((player.position + dPosition), 0.8f))
 		{
 			if (dPosition.normalized == new Vector3 (0, -1, 0))
 			{
