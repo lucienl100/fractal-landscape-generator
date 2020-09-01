@@ -1,55 +1,67 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using Random = UnityEngine.Random;
 public class SceneManager : MonoBehaviour
 {
     // Start is called before the first frame update
+    private float randHeightDiff = 1.5f;
+    private float terrainMaxHeight;
     public GameObject terrainGenerator;
     public Transform player;
+    public Camera cam;
+    private Transform camT;
     public GameObject water;
     private IEnumerator coroutine;
-    private DiamondSquareV2 ds;
+    public DiamondSquareV2 ds;
     private Waves wv;
     Transform wT;
     Transform tT;
     private bool isLoading = true;
-    private bool firstFrame = true;
-    private Vector3 playerStartingPos = new Vector3(10f, 40f, 10f);
+    private Vector3 playerStartingPos = new Vector3(10f, 120f, 10f);
+    private Vector3 playerStartingRot = new Vector3(0f, 45f, 0f);
+    private Vector3 cameraStartingRot = new Vector3(45f, 0f, 0f);
     void Start()
     {
-        
+        camT = cam.GetComponent<Transform>();
+        wT = water.GetComponent<Transform>();
+        tT = terrainGenerator.GetComponent<Transform>();
+        ds = terrainGenerator.GetComponent<DiamondSquareV2>();
+        wv = water.GetComponent<Waves>();
+
+        ds.GenerateMesh();
+
+        terrainMaxHeight = ds.baseMaxHeight;
+
+        tT.position = new Vector3(0f, 0f, 0f);
+        wT.position = new Vector3(0f, ds.GetAvgHeight() + rand(randHeightDiff), 0f);
+
+        wv.GenerateMesh();
+        player.position = new Vector3(playerStartingPos.x, playerStartingPos.y + ds.GetAvgHeight(), playerStartingPos.z);
+        player.localRotation = Quaternion.Euler(playerStartingRot);
+        camT.localRotation = Quaternion.Euler(playerStartingPos);
+        isLoading = false;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (firstFrame)
-        {
-            wT = water.GetComponent<Transform>();
-            tT = terrainGenerator.GetComponent<Transform>();
-            ds = terrainGenerator.GetComponent<DiamondSquareV2>();
-            wv = water.GetComponent<Waves>();
-
-            tT.position = new Vector3(0f, 0f, 0f);
-            wT.position = new Vector3(0f, ds.GetAvgHeight(), 0f);
-            player.position = playerStartingPos;
-            isLoading = false;
-            firstFrame = false;
-        }
         if(Input.GetKeyDown(KeyCode.Space) && isLoading == false)
         {
                 isLoading = true;
-                player.position = playerStartingPos;
+                
                 ds.GenerateMesh();
-                Debug.Log("SceneManager : " + ds.GetAvgHeight());
-                wT.position = new Vector3(0f, ds.GetAvgHeight(), 0f);
-                wv.GenMesh();
+                player.position = new Vector3(playerStartingPos.x, playerStartingPos.y + ds.GetAvgHeight(), playerStartingPos.z);
+                player.localRotation = Quaternion.Euler(playerStartingRot);
+                camT.localRotation = Quaternion.Euler(playerStartingPos);
+                wT.position = new Vector3(0f, ds.GetAvgHeight() + rand(randHeightDiff), 0f);
+                
+                wv.GenerateMesh();
                 isLoading = false;
         }
     }
-    private IEnumerator WaitForInit()
+    private float rand(float range)
     {
-        yield return new WaitForSeconds(0.01f);
+        return Random.Range(-range, range);
     }
 }
