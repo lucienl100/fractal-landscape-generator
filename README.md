@@ -25,7 +25,7 @@ this is just an example of different formating tools available for you. For help
 | Lucien Lu    | Scene Manager    |  ![95%](https://progress-bar.dev/95) |
 | Lucien Lu    | Median Filter    |  ![95%](https://progress-bar.dev/95) |
 | Timmy Truong    | Shaders     |  ![0%](https://progress-bar.dev/0) |
-| Timmy Truong    | Sun     |  ![70%](https://progress-bar.dev/70) |
+| Timmy Truong    | Sun     |  ![0%](https://progress-bar.dev/0) |
 
 ## General info
 This is project - 1 ...
