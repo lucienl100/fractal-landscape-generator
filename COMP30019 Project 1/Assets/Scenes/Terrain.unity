@@ -743,11 +743,14 @@ MonoBehaviour:
 <<<<<<< Updated upstream
   mapScalar: 257
   heightDecrement: 0.55
+<<<<<<< HEAD
 =======
   mapScalar: 256
   heightDecrement: 0.54
   randomTHeight: 0
 >>>>>>> Stashed changes
+=======
+>>>>>>> parent of 63e9df6... Merge pull request #19 from Graphics-and-Interaction-COMP30019/mybranch
   meshCollider: {fileID: 0}
   material: {fileID: 2100000, guid: 179f1e5982d2ab44f9cd8864647ea60f, type: 2}
   useMedianFilter: 0
