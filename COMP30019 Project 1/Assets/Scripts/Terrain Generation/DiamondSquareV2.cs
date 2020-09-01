@@ -266,9 +266,10 @@ public class DiamondSquareV2 : MonoBehaviour
         };
         foreach (float theta in angles)
         {
-            Vector2 translation = new Vector2(Mathf.Round((pV.x * Mathf.Cos(theta)) - (pV.y * Mathf.Sin(theta))), Mathf.Round((pV.x * Mathf.Sin(theta)) + (pV.y * Mathf.Cos(theta))));
+            //  Equation that rotates a vector around the origin, by a given angle
+            Vector2 translation = RotateVector(pV, theta);
             Vector2 tempV = mp + translation;
-            if (inBounds(tempV))
+            if (InBounds(tempV))
 			{
                 sum += verts.GetHeight(tempV);
                 count++;
@@ -281,7 +282,12 @@ public class DiamondSquareV2 : MonoBehaviour
         return sum / count;
 	}
 
-    bool inBounds(Vector2 v)
+    Vector2 RotateVector(Vector2 v, float theta)
+	{
+        //  Rotates a vector around the origin, by a given angle
+        return new Vector2(Mathf.Round((v.x * Mathf.Cos(theta)) - (v.y * Mathf.Sin(theta))), Mathf.Round((v.x * Mathf.Sin(theta)) + (v.y * Mathf.Cos(theta))));
+    }
+    bool InBounds(Vector2 v)
 	{
         //  Checks if the point is in the bounds of the grid
         if(v.x < 0 || v.x >= gridSize || v.y < 0 || v.y >= gridSize)
