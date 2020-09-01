@@ -101,39 +101,42 @@ public class DiamondSquareV2 : MonoBehaviour
 	}
     void MedianFilter()
     {
-        float[] newHeights = new float[gridSize * gridSize];
         var window = new List<float>();
-        int edgeSizeX;
-        int edgeSizeY;
         float newHeight;
+
+        int checkWindowOffsetX;
+        int checkWindowOffsetY;
+        
         int adjustedWindowWidthX;
         int adjustedWindowWidthY;
+
 		HeightGrid copy = verts.Copy();
 
         for (int x = 0; x < gridSize; x++)
         {
             adjustedWindowWidthX = GetAdjustedWindowWidth(x);
-            edgeSizeX = GetEdgeSize(x);
+            checkWindowOffsetX = GetWindowOffset(x);
             for (int y = 0; y < gridSize; y++)
             {
                 adjustedWindowWidthY = GetAdjustedWindowWidth(y);
-                edgeSizeY = GetEdgeSize(y);
+                checkWindowOffsetY = GetWindowOffset(y);
                 for (int fx = 0; fx < adjustedWindowWidthX; fx++)
                 {
                     for (int fy = 0; fy < adjustedWindowWidthY; fy++)
                     {
-                        window.Add(copy.GetHeight(new Vector2(x + fx - edgeSizeX, y + fy - edgeSizeY)));
+                        window.Add(copy.GetHeight(new Vector2(x + fx - checkWindowOffsetX, y + fy - checkWindowOffsetY)));
                     }
                 }
                 window.Sort();
                 newHeight = window[adjustedWindowWidthX * adjustedWindowWidthY / 2];
+
                 verts.SetHeight(new Vector2(x, y), newHeight);
+                
                 window.Clear();
-                newHeights[y * gridSize + x] = newHeight;
             }
         }
     }
-    int GetEdgeSize(int i)
+    int GetWindowOffset(int i)
     {
         if (i == 0)
         {
@@ -144,8 +147,8 @@ public class DiamondSquareV2 : MonoBehaviour
             return windowWidth / 2;
         }
         int adjustedWindowWidthI = Mathf.Min(windowWidth, i + 1, gridSize - i + 1);
-        int edgeSizeI = (int)Mathf.Ceil((float)adjustedWindowWidthI / 2);
-        return edgeSizeI;
+        int windowOffset = (int)Mathf.Ceil((float)adjustedWindowWidthI / 2);
+        return windowOffset;
     }
     int GetAdjustedWindowWidth(int i)
     {
@@ -263,9 +266,10 @@ public class DiamondSquareV2 : MonoBehaviour
         };
         foreach (float theta in angles)
         {
-            Vector2 translation = new Vector2(Mathf.Round((pV.x * Mathf.Cos(theta)) - (pV.y * Mathf.Sin(theta))), Mathf.Round((pV.x * Mathf.Sin(theta)) + (pV.y * Mathf.Cos(theta))));
+            //  Equation that rotates a vector around the origin, by a given angle
+            Vector2 translation = RotateVector(pV, theta);
             Vector2 tempV = mp + translation;
-            if (inBounds(tempV))
+            if (InBounds(tempV))
 			{
                 sum += verts.GetHeight(tempV);
                 count++;
@@ -278,7 +282,12 @@ public class DiamondSquareV2 : MonoBehaviour
         return sum / count;
 	}
 
-    bool inBounds(Vector2 v)
+    Vector2 RotateVector(Vector2 v, float theta)
+	{
+        //  Rotates a vector around the origin, by a given angle
+        return new Vector2(Mathf.Round((v.x * Mathf.Cos(theta)) - (v.y * Mathf.Sin(theta))), Mathf.Round((v.x * Mathf.Sin(theta)) + (v.y * Mathf.Cos(theta))));
+    }
+    bool InBounds(Vector2 v)
 	{
         //  Checks if the point is in the bounds of the grid
         if(v.x < 0 || v.x >= gridSize || v.y < 0 || v.y >= gridSize)
