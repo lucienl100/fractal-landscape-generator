@@ -12,19 +12,19 @@ public class Waves : MonoBehaviour
     public Texture2D texture;
     public Texture2D normalMap;
     Mesh water;
-    void Start()
+    void Awake()
     {
         
         water = new Mesh();
         water.name = "waterMesh";
-        GenMesh();
+        GenerateMesh();
         MeshFilter meshFilter = this.gameObject.AddComponent<MeshFilter>();
         meshFilter.mesh = water;
         MeshRenderer renderer = this.gameObject.AddComponent<MeshRenderer>();
         renderer.material = new Material(Shader.Find("Unlit/WaterShader"));
         renderer.material.SetTexture("_BumpMap", normalMap);
     }
-    public void GenMesh()
+    public void GenerateMesh()
     {
         water.vertices = GenVertices();
         water.triangles = GenTriangles(water);
@@ -51,7 +51,6 @@ public class Waves : MonoBehaviour
     }
     private Vector2[] GenUVs()
     {
-        int i = 0;
         var uv = new Vector2[(resolution) * resolution];
         for (int x = 0; x < resolution; x++)
         {
