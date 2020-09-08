@@ -16,7 +16,7 @@ public class HeightGrid
 		this.grid = new Vector3[size * size];
 		this.size = size;
 	}
-	public int GetGridSize()
+	public float GetGridSize()
 	{
 		return size;
 	}
