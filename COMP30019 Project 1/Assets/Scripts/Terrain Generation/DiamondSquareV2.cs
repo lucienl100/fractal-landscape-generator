@@ -20,10 +20,13 @@ public class DiamondSquareV2 : MonoBehaviour
     private Vector2[] uvs;
     private int windowWidth = 9;
     private float maxHeight;
+    public float AvgHeight;
     public float randomTHeight;
+    
     public MeshCollider meshCollider;
     public Material material;
     public bool useMedianFilter = true;
+    public PointLight pointLight;
     
     void Awake()
     {
@@ -37,8 +40,16 @@ public class DiamondSquareV2 : MonoBehaviour
         verts = new HeightGrid(gridSize);
         triangles = new int[gridSize * gridSize * 6];
         uvs = new Vector2[(int)Math.Pow(gridSize, 2)];
-        maxHeight = baseMaxHeight;
+        maxHeight = baseMaxHeight; 
     }
+
+    void Update()
+    {
+        // Pass updated light positions to shader
+        material.SetColor("_PointLightColor", this.pointLight.color);
+        material.SetVector("_PointLightPosition", this.pointLight.GetWorldPosition());
+    }
+
     public float GetAvgHeight()
     {
         return verts.GetAvgHeight();
@@ -63,7 +74,13 @@ public class DiamondSquareV2 : MonoBehaviour
         mesh.RecalculateBounds();
         mesh.RecalculateNormals();
         meshCollider.sharedMesh = mesh;
-        randomTHeight =  0.5f * GetAvgHeight();
+        AvgHeight = GetAvgHeight();
+        randomTHeight =  0.5f * AvgHeight;
+
+        // Pass new heights to shader
+        material.SetFloat("_avgheight", AvgHeight);
+        material.SetFloat("_maxheight", highestCornerHeight);
+        
     }
     void GenerateVertsTriangles()
 	{
@@ -187,7 +204,8 @@ public class DiamondSquareV2 : MonoBehaviour
         {
            verts.SetHeight(v, RandomInitialHeight());
         }
-        highestCornerHeight = Mathf.Max(vs[0].y, vs[1].y, vs[2].y, vs[3].y);
+        highestCornerHeight = Mathf.Max(verts.GetHeight(vs[0]), verts.GetHeight(vs[1]), verts.GetHeight(vs[2]), verts.GetHeight(vs[3]));
+
         LowerHeight();
         for(int i = 0; i < nVal; i++)
 		{
