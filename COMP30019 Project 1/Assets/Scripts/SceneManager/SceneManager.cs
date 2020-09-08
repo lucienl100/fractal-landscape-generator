@@ -1,11 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using Random = UnityEngine.Random;
 public class SceneManager : MonoBehaviour
 {
     // Start is called before the first frame update
-    private float randHeightDiff = 1.5f;
+    //private float randHeightDiff = 1.5f;
     private float terrainMaxHeight;
     private float terrainMaxHeightCheckDist = 5f;
     public GameObject terrainGenerator;
@@ -17,8 +18,16 @@ public class SceneManager : MonoBehaviour
     Transform wT;
     Transform tT;
     private bool isLoading = true;
+<<<<<<< Updated upstream
     private bool firstFrame = true;
     private Vector3 playerStartingPos = new Vector3(10f, 80f, 10f);
+=======
+    private Vector3 playerStartingPos = new Vector3(10f, 120f, 10f);
+    private Vector3 playerStartingRot = new Vector3(0f, 45f, 0f);
+    private Vector3 cameraStartingRot = new Vector3(45f, 0f, 0f);
+    public Text guide;
+    private bool guideOn = true;
+>>>>>>> Stashed changes
     void Start()
     {
         
@@ -27,6 +36,7 @@ public class SceneManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+<<<<<<< Updated upstream
         if (firstFrame)
         {
             
@@ -41,6 +51,12 @@ public class SceneManager : MonoBehaviour
             player.position = playerStartingPos;
             isLoading = false;
             firstFrame = false;
+=======
+        if(Input.GetKeyDown(KeyCode.Q))
+        {
+            guide.enabled = !guideOn;
+            guideOn = !guideOn;
+>>>>>>> Stashed changes
         }
         if(Input.GetKeyDown(KeyCode.Space) && isLoading == false)
         {

@@ -23,9 +23,19 @@ public class DiamondSquareV2 : MonoBehaviour
     public float randomTHeight;
     public MeshCollider meshCollider;
     public Material material;
+<<<<<<< Updated upstream
     public bool useMedianFilter = true;
+<<<<<<< Updated upstream
     // Start is called before the first frame update
     void Start()
+=======
+=======
+    public bool useMedianFilter = false;
+    public PointLight pointLight;
+>>>>>>> Stashed changes
+    
+    void Awake()
+>>>>>>> Stashed changes
     {
         generator = GetComponent<Transform>();
         gridSize = (int)Math.Pow(2, nVal) + 1;
@@ -37,8 +47,26 @@ public class DiamondSquareV2 : MonoBehaviour
         verts = new HeightGrid(gridSize);
         triangles = new int[gridSize * gridSize * 6];
         uvs = new Vector2[(int)Math.Pow(gridSize, 2)];
+<<<<<<< Updated upstream
         maxHeight = baseMaxHeight;
+<<<<<<< Updated upstream
         GenerateMesh();
+=======
+=======
+        maxHeight = baseMaxHeight; 
+    }
+
+    void Update()
+    {
+        if(Input.GetKeyDown(KeyCode.E))
+        {
+            useMedianFilter = !useMedianFilter;
+        }
+        // Pass updated light positions to shader
+        material.SetColor("_PointLightColor", this.pointLight.color);
+        material.SetVector("_PointLightPosition", this.pointLight.GetWorldPosition());
+>>>>>>> Stashed changes
+>>>>>>> Stashed changes
     }
     public float GetAvgHeight()
     {
