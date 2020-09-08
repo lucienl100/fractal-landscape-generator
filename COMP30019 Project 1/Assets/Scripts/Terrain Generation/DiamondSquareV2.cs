@@ -25,10 +25,13 @@ public class DiamondSquareV2 : MonoBehaviour
     public Material material;
 <<<<<<< Updated upstream
     public bool useMedianFilter = true;
+<<<<<<< HEAD
 =======
     public bool useMedianFilter = false;
     public PointLight pointLight;
 >>>>>>> Stashed changes
+=======
+>>>>>>> parent of 0015c7b... Implement phong shaders, mountain colours :)
     
     void Awake()
     {
@@ -42,6 +45,7 @@ public class DiamondSquareV2 : MonoBehaviour
         verts = new HeightGrid(gridSize);
         triangles = new int[gridSize * gridSize * 6];
         uvs = new Vector2[(int)Math.Pow(gridSize, 2)];
+<<<<<<< HEAD
 <<<<<<< Updated upstream
         maxHeight = baseMaxHeight;
 =======
@@ -58,6 +62,9 @@ public class DiamondSquareV2 : MonoBehaviour
         material.SetColor("_PointLightColor", this.pointLight.color);
         material.SetVector("_PointLightPosition", this.pointLight.GetWorldPosition());
 >>>>>>> Stashed changes
+=======
+        maxHeight = baseMaxHeight;
+>>>>>>> parent of 0015c7b... Implement phong shaders, mountain colours :)
     }
     public float GetAvgHeight()
     {

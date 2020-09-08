@@ -43,7 +43,10 @@ MonoBehaviour:
     y: 0
     width: 640
     height: 271
+<<<<<<< HEAD
 <<<<<<< Updated upstream
+=======
+>>>>>>> parent of 0015c7b... Implement phong shaders, mountain colours :)
   m_MinSize: {x: 100, y: 100}
   m_MaxSize: {x: 4000, y: 4000}
   m_ActualView: {fileID: 19}
@@ -77,17 +80,23 @@ MonoBehaviour:
     y: 676
     width: 1920
     height: 271
+<<<<<<< HEAD
 <<<<<<< Updated upstream
+=======
+>>>>>>> parent of 0015c7b... Implement phong shaders, mountain colours :)
   m_MinSize: {x: 331, y: 271}
   m_MaxSize: {x: 14001, y: 10021}
   vertical: 0
   controlID: 115
+<<<<<<< HEAD
 =======
   m_MinSize: {x: 332, y: 271}
   m_MaxSize: {x: 14002, y: 10021}
   vertical: 0
   controlID: 58
 >>>>>>> Stashed changes
+=======
+>>>>>>> parent of 0015c7b... Implement phong shaders, mountain colours :)
 --- !u!114 &4
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -107,6 +116,7 @@ MonoBehaviour:
     y: 0
     width: 427
     height: 676
+<<<<<<< HEAD
 <<<<<<< Updated upstream
   m_MinSize: {x: 275, y: 50}
   m_MaxSize: {x: 4000, y: 4000}
@@ -116,6 +126,11 @@ MonoBehaviour:
   m_MaxSize: {x: 4001, y: 4021}
   m_ActualView: {fileID: 16}
 >>>>>>> Stashed changes
+=======
+  m_MinSize: {x: 275, y: 50}
+  m_MaxSize: {x: 4000, y: 4000}
+  m_ActualView: {fileID: 15}
+>>>>>>> parent of 0015c7b... Implement phong shaders, mountain colours :)
   m_Panes:
   - {fileID: 16}
   m_Selected: 0
@@ -139,7 +154,10 @@ MonoBehaviour:
     y: 0
     width: 265
     height: 676
+<<<<<<< HEAD
 <<<<<<< Updated upstream
+=======
+>>>>>>> parent of 0015c7b... Implement phong shaders, mountain colours :)
   m_MinSize: {x: 200, y: 200}
   m_MaxSize: {x: 4000, y: 4000}
   m_ActualView: {fileID: 16}
@@ -174,17 +192,23 @@ MonoBehaviour:
     y: 0
     width: 1920
     height: 676
+<<<<<<< HEAD
 <<<<<<< Updated upstream
+=======
+>>>>>>> parent of 0015c7b... Implement phong shaders, mountain colours :)
   m_MinSize: {x: 678, y: 221}
   m_MaxSize: {x: 12003, y: 4021}
   vertical: 0
   controlID: 80
+<<<<<<< HEAD
 =======
   m_MinSize: {x: 679, y: 221}
   m_MaxSize: {x: 12004, y: 4021}
   vertical: 0
   controlID: 143
 >>>>>>> Stashed changes
+=======
+>>>>>>> parent of 0015c7b... Implement phong shaders, mountain colours :)
 --- !u!114 &7
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -206,13 +230,18 @@ MonoBehaviour:
     height: 676
   m_MinSize: {x: 202, y: 221}
   m_MaxSize: {x: 4002, y: 4021}
+<<<<<<< HEAD
 <<<<<<< Updated upstream
   m_ActualView: {fileID: 17}
 =======
   m_ActualView: {fileID: 19}
 >>>>>>> Stashed changes
+=======
+  m_ActualView: {fileID: 17}
+>>>>>>> parent of 0015c7b... Implement phong shaders, mountain colours :)
   m_Panes:
   - {fileID: 18}
+<<<<<<< HEAD
 <<<<<<< Updated upstream
   m_Selected: 0
   m_LastSelected: 1
@@ -222,6 +251,10 @@ MonoBehaviour:
   m_Selected: 1
   m_LastSelected: 0
 >>>>>>> Stashed changes
+=======
+  m_Selected: 0
+  m_LastSelected: 1
+>>>>>>> parent of 0015c7b... Implement phong shaders, mountain colours :)
 --- !u!114 &8
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -242,17 +275,23 @@ MonoBehaviour:
     y: 30
     width: 1920
     height: 947
+<<<<<<< HEAD
 <<<<<<< Updated upstream
+=======
+>>>>>>> parent of 0015c7b... Implement phong shaders, mountain colours :)
   m_MinSize: {x: 678, y: 492}
   m_MaxSize: {x: 14001, y: 14042}
   vertical: 0
   controlID: 78
+<<<<<<< HEAD
 =======
   m_MinSize: {x: 679, y: 492}
   m_MaxSize: {x: 14002, y: 14042}
   vertical: 0
   controlID: 56
 >>>>>>> Stashed changes
+=======
+>>>>>>> parent of 0015c7b... Implement phong shaders, mountain colours :)
 --- !u!114 &9
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -274,17 +313,23 @@ MonoBehaviour:
     y: 0
     width: 1920
     height: 947
+<<<<<<< HEAD
 <<<<<<< Updated upstream
+=======
+>>>>>>> parent of 0015c7b... Implement phong shaders, mountain colours :)
   m_MinSize: {x: 678, y: 492}
   m_MaxSize: {x: 14001, y: 14042}
   vertical: 1
   controlID: 79
+<<<<<<< HEAD
 =======
   m_MinSize: {x: 679, y: 492}
   m_MaxSize: {x: 14002, y: 14042}
   vertical: 1
   controlID: 57
 >>>>>>> Stashed changes
+=======
+>>>>>>> parent of 0015c7b... Implement phong shaders, mountain colours :)
 --- !u!114 &10
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -455,6 +500,7 @@ MonoBehaviour:
     m_IsLocked: 0
   m_FolderTreeState:
     scrollPos: {x: 0, y: 0}
+<<<<<<< HEAD
 <<<<<<< Updated upstream
     m_SelectedIDs: 08340000
     m_LastClickedID: 13320
@@ -464,6 +510,11 @@ MonoBehaviour:
     m_LastClickedID: 13344
     m_ExpandedIDs: 00000000163400001e34000064350000fe35000000ca9a3b
 >>>>>>> Stashed changes
+=======
+    m_SelectedIDs: 08340000
+    m_LastClickedID: 13320
+    m_ExpandedIDs: 00000000fe3300000634000000ca9a3b
+>>>>>>> parent of 0015c7b... Implement phong shaders, mountain colours :)
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -491,11 +542,15 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
+<<<<<<< HEAD
 <<<<<<< Updated upstream
     m_ExpandedIDs: 00000000fe330000
 =======
     m_ExpandedIDs: 0000000016340000
 >>>>>>> Stashed changes
+=======
+    m_ExpandedIDs: 00000000fe330000
+>>>>>>> parent of 0015c7b... Implement phong shaders, mountain colours :)
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -618,6 +673,7 @@ MonoBehaviour:
   m_SceneHierarchy:
     m_TreeViewState:
       scrollPos: {x: 0, y: 0}
+<<<<<<< HEAD
 <<<<<<< Updated upstream
       m_SelectedIDs: 82010000
       m_LastClickedID: 0
@@ -635,17 +691,30 @@ MonoBehaviour:
         m_Name: Canvas
         m_OriginalName: Canvas
 >>>>>>> Stashed changes
+=======
+      m_SelectedIDs: 82010000
+      m_LastClickedID: 0
+      m_ExpandedIDs: c0f4ffff04fbffff60350000
+      m_RenameOverlay:
+        m_UserAcceptedRename: 0
+        m_Name: 
+        m_OriginalName: 
+>>>>>>> parent of 0015c7b... Implement phong shaders, mountain colours :)
         m_EditFieldRect:
           serializedVersion: 2
           x: 0
           y: 0
           width: 0
           height: 0
+<<<<<<< HEAD
 <<<<<<< Updated upstream
         m_UserData: 0
 =======
         m_UserData: -54352
 >>>>>>> Stashed changes
+=======
+        m_UserData: 0
+>>>>>>> parent of 0015c7b... Implement phong shaders, mountain colours :)
         m_IsWaitingForDelay: 0
         m_IsRenaming: 0
         m_OriginalEventType: 11
@@ -694,6 +763,7 @@ MonoBehaviour:
   m_PlayAudio: 0
   m_AudioPlay: 0
   m_Position:
+<<<<<<< HEAD
 <<<<<<< Updated upstream
     m_Target: {x: 55.178146, y: 28.308414, z: 9.490341}
     speed: 2
@@ -703,6 +773,11 @@ MonoBehaviour:
     speed: 2
     m_Value: {x: 531.52704, y: 910.5944, z: 314.36856}
 >>>>>>> Stashed changes
+=======
+    m_Target: {x: 55.178146, y: 28.308414, z: 9.490341}
+    speed: 2
+    m_Value: {x: 55.178146, y: 28.308414, z: 9.490341}
+>>>>>>> parent of 0015c7b... Implement phong shaders, mountain colours :)
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -748,7 +823,10 @@ MonoBehaviour:
     m_GridAxis: 1
     m_gridOpacity: 0.5
   m_Rotation:
+<<<<<<< HEAD
 <<<<<<< Updated upstream
+=======
+>>>>>>> parent of 0015c7b... Implement phong shaders, mountain colours :)
     m_Target: {x: 0.12610129, y: 0.047470573, z: -0.008043189, w: 0.9912825}
     speed: 2
     m_Value: {x: 0.12604706, y: 0.04745016, z: -0.00803973, w: 0.99085623}
@@ -756,6 +834,7 @@ MonoBehaviour:
     m_Target: 456.97546
     speed: 2
     m_Value: 456.97546
+<<<<<<< HEAD
 =======
     m_Target: {x: -0.021384418, y: -0.95691365, z: 0.28107157, w: -0.075778335}
     speed: 2
@@ -765,6 +844,8 @@ MonoBehaviour:
     speed: 2
     m_Value: 64.68541
 >>>>>>> Stashed changes
+=======
+>>>>>>> parent of 0015c7b... Implement phong shaders, mountain colours :)
   m_Ortho:
     m_Target: 0
     speed: 2
