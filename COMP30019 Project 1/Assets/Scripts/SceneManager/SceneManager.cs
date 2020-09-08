@@ -34,7 +34,7 @@ public class SceneManager : MonoBehaviour
         terrainMaxHeight = ds.baseMaxHeight;
 
         tT.position = new Vector3(0f, 0f, 0f);
-        wT.position = new Vector3(0f, ds.GetAvgHeight() + rand(randHeightDiff), 0f);
+        wT.position = new Vector3(0f, ds.GetAvgHeight(), 0f);
 
         wv.GenerateMesh();
         player.position = new Vector3(playerStartingPos.x, playerStartingPos.y + ds.GetAvgHeight(), playerStartingPos.z);
@@ -54,7 +54,7 @@ public class SceneManager : MonoBehaviour
                 player.position = new Vector3(playerStartingPos.x, playerStartingPos.y + ds.GetAvgHeight(), playerStartingPos.z);
                 player.localRotation = Quaternion.Euler(playerStartingRot);
                 camT.localRotation = Quaternion.Euler(playerStartingPos);
-                wT.position = new Vector3(0f, ds.GetAvgHeight() + rand(randHeightDiff), 0f);
+                wT.position = new Vector3(0f, ds.GetAvgHeight(), 0f);
                 
                 wv.GenerateMesh();
                 isLoading = false;
