@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Grass
-  m_Shader: {fileID: 4800000, guid: a8dd7319e795e174ab52458007825e7c, type: 3}
+  m_Shader: {fileID: 46, guid: 0000000000000000f000000000000000, type: 0}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -63,9 +63,6 @@ Material:
     - _GlossMapScale: 1
     - _Glossiness: 0.286
     - _GlossyReflections: 1
-    - _Ka: 1
-    - _Kd: 1
-    - _Ks: 0.05
     - _Metallic: 0.58
     - _Mode: 0
     - _OcclusionStrength: 1
@@ -75,13 +72,19 @@ Material:
     - _SrcBlend: 1
     - _UVSec: 0
     - _ZWrite: 1
-    - _avgheight: 18.62595
+<<<<<<< Updated upstream
+    m_Colors:
+    - _Color: {r: 0.46293166, g: 0.9528302, b: 0.57690156, a: 1}
+    - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
+=======
+    - _avgheight: -5.229886
     - _fAtt: 1
     - _height: 17.403847
-    - _maxheight: 55.320023
+    - _maxheight: 47.060947
     - _specN: 1
     m_Colors:
     - _Color: {r: 0.46293166, g: 0.9528302, b: 0.57690156, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _PointLightColor: {r: 0.5566038, g: 0.5566038, b: 0.5566038, a: 0}
-    - _PointLightPosition: {r: 128.5, g: -57.558838, b: 13.612076, a: 0}
+    - _PointLightPosition: {r: 128.5, g: 96.80583, b: 43.99626, a: 0}
+>>>>>>> Stashed changes
