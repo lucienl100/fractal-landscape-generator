@@ -39,14 +39,6 @@ public class CameraMovement : MonoBehaviour
 		{
 			velocity += transform.right;
 		}
-		if (Input.GetKey(KeyCode.C))
-		{
-			velocity += transform.up;
-		}
-		if (Input.GetKey(KeyCode.Z))
-		{
-			velocity += -transform.up;
-		}
 		
 		velocity.Normalize();
 		if (Input.GetKey(KeyCode.LeftShift))
@@ -54,8 +46,11 @@ public class CameraMovement : MonoBehaviour
 			velocity *= sprintMultiplier;
 		}
 		Vector3 dPosition = velocity * Time.deltaTime * speed;
+		
 		float i = 0.001f;
-		while(Physics.CheckSphere((player.position + dPosition), 0.8f))
+
+		//	Check if the player will collide with the terrain by 'spawning' a sphere at the next position
+		while(Physics.CheckSphere((player.position + dPosition), 0.5f))
 		{
 			if (dPosition.normalized == new Vector3 (0, -1, 0))
 			{

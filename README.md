@@ -13,17 +13,19 @@ this is just an example of different formating tools available for you. For help
 * [Diamond-Square implementation](#diamond-square-implementation)
 * [Camera Motion](#camera-motion)
 * [Vertex Shader](#vertex-shader)
+* [Median Filter](#median-filter)
 
 ## Team Members
 
 | Name | Task | State |
 | :---         |     :---:      |          ---: |
-| Nathan Rearick  | Diamond Square     |  ![0%](https://progress-bar.dev/0) |
-| Nathan Rearick  | Camera Movement     |  ![0%](https://progress-bar.dev/0) |
-| Lucien Lu    | Water      |  ![0%](https://progress-bar.dev/0) |
-| Lucien Lu    | Waves      |  ![0%](https://progress-bar.dev/0) |
-| Timmy Truong    | Shaders     |  ![0%](https://progress-bar.dev/0) |
-| Timmy Truong    | Sun     |  ![0%](https://progress-bar.dev/0) |
+| Nathan Rearick  | Diamond Square     |  ![95%](https://progress-bar.dev/95) |
+| Nathan Rearick  | Camera Movement     |  ![95%](https://progress-bar.dev/95) |
+| Lucien Lu    | Water and Water Shader      |  ![95%](https://progress-bar.dev/95) |
+| Lucien Lu    | Scene Manager    |  ![95%](https://progress-bar.dev/95) |
+| Lucien Lu    | Median Filter    |  ![95%](https://progress-bar.dev/95) |
+| Timmy Truong    | Shaders     |  ![70%](https://progress-bar.dev/60) |
+| Timmy Truong    | Sun     |  ![50%](https://progress-bar.dev/50) |
 
 ## General info
 This is project - 1 ...
@@ -40,6 +42,46 @@ Project is created with:
 You can include a code snippet here, but make sure to explain it! 
 Do not just copy all your code, only explain the important parts.
 
+A single method was used to find the average height of related points:
+Get the displacement vector between the point of interest and another point which is the based midpoint in the case of a square step, then perform a rotation for 0, 90, 180, 270 degrees on the displacement vector, this will get the four/three points that enclose the point and check if each point is in the grid: at most there will be one missing. Then find the average of these points and assign it to the point of interest. 
+
+Code:
+
+```c#
+    float AverageHeight(Vector2 pV, Vector2 mp)
+	{
+        float sum = 0;
+        int count = 0;
+
+        //  Get the displacement vector between the mid point and the corner point
+        Vector2 dV = pV - mp;
+
+        float[] angles = new[] {
+            0f, Mathf.PI * 0.5f, Mathf.PI, Mathf.PI * 1.5f
+        };
+        foreach (float theta in angles)
+        {
+            Vector2 translation = rotateVector(dV, theta);
+            Vector2 newV = pV + translation;
+            if (inBounds(newV))
+			{
+                sum += verts.GetHeight(newV);
+                count++;
+			}
+		}
+        if(count == 0)
+		{
+            return 0;
+		}
+        return sum / count;
+	}
+    Vector2 rotateVector(Vector2 v, float theta)
+    {
+        return new Vector2(Mathf.Round((v.x * Mathf.Cos(theta)) - (v.y * Mathf.Sin(theta))), 
+            Mathf.Round((v.x * Mathf.Sin(theta)) + (v.y * Mathf.Cos(theta))));
+    }
+ ```
+ 
 ```c#
 public class meshGenerator : MonoBehaviour
 {
@@ -80,3 +122,53 @@ You can use emojis :+1: but do not over use it, we are looking for professional 
 - [ ] Camera motion 
 - [ ] Surface properties
 - [ ] Project organisation and documentation
+
+## Median Filter
+
+We decided to add an optional Median Filter to the terrain generation. This will increase computation time and loading time by approximately 1 second but results in a much smoother surface.
+<p align="left">
+  <img src="Gifs/nomedianfilter"  width="300" >
+</p>
+<p align="right">
+  <img src="Gifs/medianfilter"  width="300" >
+</p>
+
+```c#
+void MedianFilter()
+    {
+        var window = new List<float>();
+        float newHeight;
+
+        int checkWindowOffsetX;
+        int checkWindowOffsetY;
+        
+        int adjustedWindowWidthX;
+        int adjustedWindowWidthY;
+
+		HeightGrid copy = verts.Copy();
+
+        for (int x = 0; x < gridSize; x++)
+        {
+            adjustedWindowWidthX = GetAdjustedWindowWidth(x);
+            checkWindowOffsetX = GetWindowOffset(x);
+            for (int y = 0; y < gridSize; y++)
+            {
+                adjustedWindowWidthY = GetAdjustedWindowWidth(y);
+                checkWindowOffsetY = GetWindowOffset(y);
+                for (int fx = 0; fx < adjustedWindowWidthX; fx++)
+                {
+                    for (int fy = 0; fy < adjustedWindowWidthY; fy++)
+                    {
+                        window.Add(copy.GetHeight(new Vector2(x + fx - checkWindowOffsetX, y + fy - checkWindowOffsetY)));
+                    }
+                }
+                window.Sort();
+                newHeight = window[adjustedWindowWidthX * adjustedWindowWidthY / 2];
+
+                verts.SetHeight(new Vector2(x, y), newHeight);
+                
+                window.Clear();
+            }
+        }
+    }
+```
