@@ -24,7 +24,7 @@ this is just an example of different formating tools available for you. For help
 | Lucien Lu    | Water and Water Shader      |  ![95%](https://progress-bar.dev/95) |
 | Lucien Lu    | Scene Manager    |  ![95%](https://progress-bar.dev/95) |
 | Lucien Lu    | Median Filter    |  ![95%](https://progress-bar.dev/95) |
-| Timmy Truong    | Shaders     |  ![70%](https://progress-bar.dev/60) |
+| Timmy Truong    | Shaders     |  ![60%](https://progress-bar.dev/60) |
 | Timmy Truong    | Sun     |  ![50%](https://progress-bar.dev/50) |
 
 ## General info

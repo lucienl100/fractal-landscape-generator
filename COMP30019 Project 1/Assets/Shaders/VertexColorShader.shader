@@ -1,6 +1,6 @@
 ﻿//UNITY_SHADER_NO_UPGRADE
 
-Shader "Unlit/VertexColorShader"
+Shader "Unlit/TerrainShader"
 {        
 	Properties 
     { 
