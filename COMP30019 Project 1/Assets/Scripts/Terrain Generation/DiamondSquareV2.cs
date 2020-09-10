@@ -20,22 +20,15 @@ public class DiamondSquareV2 : MonoBehaviour
     private Vector2[] uvs;
     private int windowWidth = 9;
     private float maxHeight;
+    public float AvgHeight;
     public float randomTHeight;
+    
     public MeshCollider meshCollider;
     public Material material;
-<<<<<<< Updated upstream
     public bool useMedianFilter = true;
-<<<<<<< Updated upstream
-    // Start is called before the first frame update
-    void Start()
-=======
-=======
-    public bool useMedianFilter = false;
     public PointLight pointLight;
->>>>>>> Stashed changes
     
     void Awake()
->>>>>>> Stashed changes
     {
         generator = GetComponent<Transform>();
         gridSize = (int)Math.Pow(2, nVal) + 1;
@@ -47,27 +40,16 @@ public class DiamondSquareV2 : MonoBehaviour
         verts = new HeightGrid(gridSize);
         triangles = new int[gridSize * gridSize * 6];
         uvs = new Vector2[(int)Math.Pow(gridSize, 2)];
-<<<<<<< Updated upstream
-        maxHeight = baseMaxHeight;
-<<<<<<< Updated upstream
-        GenerateMesh();
-=======
-=======
         maxHeight = baseMaxHeight; 
     }
 
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.E))
-        {
-            useMedianFilter = !useMedianFilter;
-        }
         // Pass updated light positions to shader
         material.SetColor("_PointLightColor", this.pointLight.color);
         material.SetVector("_PointLightPosition", this.pointLight.GetWorldPosition());
->>>>>>> Stashed changes
->>>>>>> Stashed changes
     }
+
     public float GetAvgHeight()
     {
         return verts.GetAvgHeight();
@@ -92,8 +74,13 @@ public class DiamondSquareV2 : MonoBehaviour
         mesh.RecalculateBounds();
         mesh.RecalculateNormals();
         meshCollider.sharedMesh = mesh;
-        randomTHeight = Rand(baseMaxHeight * 0.1f) - 0.5f * highestCornerHeight;
-        generator.position = new Vector3(0f, randomTHeight, 0f);
+        AvgHeight = GetAvgHeight();
+        randomTHeight =  0.5f * AvgHeight;
+
+        // Pass new heights to shader
+        material.SetFloat("_avgheight", AvgHeight);
+        material.SetFloat("_maxheight", highestCornerHeight);
+        
     }
     void GenerateVertsTriangles()
 	{
@@ -217,7 +204,8 @@ public class DiamondSquareV2 : MonoBehaviour
         {
            verts.SetHeight(v, RandomInitialHeight());
         }
-        highestCornerHeight = Mathf.Max(vs[0].y, vs[1].y, vs[2].y, vs[3].y);
+        highestCornerHeight = Mathf.Max(verts.GetHeight(vs[0]), verts.GetHeight(vs[1]), verts.GetHeight(vs[2]), verts.GetHeight(vs[3]));
+
         LowerHeight();
         for(int i = 0; i < nVal; i++)
 		{
@@ -290,24 +278,25 @@ public class DiamondSquareV2 : MonoBehaviour
         }
     }
 
-    float AverageHeight(Vector2 pV, Vector2 mp)
+    float AverageHeight(Vector2 mp, Vector2 corner)
 	{
         float sum = 0;
         int count = 0;
 
-        //  Get the displacement vector between the mid point and the corner point
-        Vector2 dV = pV - mp;
+        //  Get the position vector between the mid point and the corner point
+        Vector2 dV = mp - corner;
 
         float[] angles = new[] {
             0f, Mathf.PI * 0.5f, Mathf.PI, Mathf.PI * 1.5f
         };
         foreach (float theta in angles)
         {
-            Vector2 translation = rotateVector(dV, theta);
-            Vector2 newV = pV + translation;
-            if (inBounds(newV))
+            //  Equation that rotates a vector around the origin, by a given angle
+            Vector2 translation = RotateVector(dV, theta);
+            Vector2 tempV = mp + translation;
+            if (InBounds(tempV))
 			{
-                sum += verts.GetHeight(newV);
+                sum += verts.GetHeight(tempV);
                 count++;
 			}
 		}
@@ -317,12 +306,14 @@ public class DiamondSquareV2 : MonoBehaviour
 		}
         return sum / count;
 	}
-    Vector2 rotateVector(Vector2 v, float theta)
-    {
+
+    Vector2 RotateVector(Vector2 v, float theta)
+	{
+        //  Rotates a vector around the origin, by a given angle
         return new Vector2(Mathf.Round((v.x * Mathf.Cos(theta)) - (v.y * Mathf.Sin(theta))), 
             Mathf.Round((v.x * Mathf.Sin(theta)) + (v.y * Mathf.Cos(theta))));
     }
-    bool inBounds(Vector2 v)
+    bool InBounds(Vector2 v)
 	{
         //  Checks if the point is in the bounds of the grid
         if(v.x < 0 || v.x >= gridSize || v.y < 0 || v.y >= gridSize)
