@@ -12,6 +12,8 @@ public class Waves : MonoBehaviour
     public Texture2D texture;
     public Texture2D normalMap;
     Mesh water;
+    public PointLight pointLight;
+    private MeshRenderer meshrenderer;
     void Awake()
     {
         
@@ -20,9 +22,15 @@ public class Waves : MonoBehaviour
         GenerateMesh();
         MeshFilter meshFilter = this.gameObject.AddComponent<MeshFilter>();
         meshFilter.mesh = water;
-        MeshRenderer renderer = this.gameObject.AddComponent<MeshRenderer>();
-        renderer.material = new Material(Shader.Find("Unlit/WaterShader"));
-        renderer.material.SetTexture("_BumpMap", normalMap);
+        meshrenderer = this.gameObject.AddComponent<MeshRenderer>();
+        meshrenderer.material = new Material(Shader.Find("Unlit/WaterShader"));
+        // renderer.material.SetTexture("_BumpMap", normalMap);
+    }
+    void Update()
+    {
+        // Pass updated light positions to shader
+        meshrenderer.material.SetColor("_PointLightColor", this.pointLight.color);
+        meshrenderer.material.SetVector("_PointLightPosition", this.pointLight.GetWorldPosition());
     }
     public void GenerateMesh()
     {
