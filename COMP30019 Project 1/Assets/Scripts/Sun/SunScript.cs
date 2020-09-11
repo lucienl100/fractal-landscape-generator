@@ -5,14 +5,13 @@ using UnityEngine;
 public class SunScript : MonoBehaviour
 {
 
-    private float halfgrid;
+    private float height = 256;
     public GameObject terrainGenerator;
 
     // Start is called before the first frame update
-    void Start()
+    void Update()
     {
-        halfgrid = terrainGenerator.GetComponent<DiamondSquareV2>().GetGridSize()/2;
-        this.transform.localPosition = new Vector3(0.0f, halfgrid, 0.0f); 
+        this.transform.localPosition = new Vector3(0.0f, height, 0.0f); 
     }
     
 }

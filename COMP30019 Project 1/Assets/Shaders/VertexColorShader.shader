@@ -49,7 +49,7 @@ Shader "Unlit/VertexColorShader"
 				float4 vertex : SV_POSITION;
 				float4 color : COLOR;
                 float4 worldVertex : TEXCOORD0;
-                float3 worldNormal : TEXCOORD1;
+				float3 worldNormal : TEXCOORD1;
 			};
 
 			// Implementation of the vertex shader
@@ -72,9 +72,10 @@ Shader "Unlit/VertexColorShader"
 			fixed4 frag(vertOut v) : SV_Target
 			{
 				float snowheight;
-				float heightweight = 0.7;
-				snowheight = _avgheight+heightweight*(_maxheight - _avgheight);
-
+				// float heightweight = 0.7;
+				// snowheight = _avgheight+heightweight*(_maxheight - _avgheight);
+				snowheight = _maxheight - (_maxheight - _avgheight)/4;
+				float sealevel = _avgheight + 5;
 				float x = 1.0;
 				float y = 1.0;
 				float3 green = float3(0.3f, 0.8f, 0.1f);
@@ -88,13 +89,13 @@ Shader "Unlit/VertexColorShader"
                 if (v.worldVertex.y > sin(v.worldVertex.x*v.worldVertex.z/500)+snowheight) {
 					// White down to snow height
 					v.color.rgb = white;
-				} else if (v.worldVertex.y  > _avgheight+5) {
+				} else if (v.worldVertex.y  > (sealevel)) {
 					// Gradient brown to green until reached avg + 5
-					y = clamp(((snowheight - v.worldVertex.y)*(snowheight - v.worldVertex.y))/300, 0, 1);
+					y = clamp(((snowheight - v.worldVertex.y))/(snowheight-sealevel), 0, 1);
 					v.color.rgb = brown + y*brown2greendiff;
 				} else {
 					// Green to sand
-					x = clamp(((_avgheight+5 - v.worldVertex.y))/5, 0, 1);
+					x = clamp(((sealevel - v.worldVertex.y))/(4), 0, 1);
 					v.color.rgb = green + x*green2sanddiff;
 				} 
 
