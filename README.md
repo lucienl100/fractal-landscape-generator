@@ -95,24 +95,6 @@ Code:
             Mathf.Round((v.x * Mathf.Sin(theta)) + (v.y * Mathf.Cos(theta))));
     }
  ```
- 
-```c#
-public class meshGenerator : MonoBehaviour
-{
-    //This function run once when Unity is in Play
-     void Start ()
-    {
-      GenerateMesh(); 
-    }
-    
-    void GenerateMesh()
-    {
-      .
-      .
-      .
-    }
-}
-```
 
 ## Camera Motion
 
