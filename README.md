@@ -29,19 +29,32 @@ this is just an example of different formating tools available for you. For help
 
 ## General info
 This is project - 1 ...
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum
+Project 1 is an implementation of the Diamond Square algorithm and custom HLSL shaders that demonstrates phong shading. This project is based on generating a fractal landscape using the DS algorithm. This implementation is made by, Lucien Lu, Nathan Rearick, Timmy Truong.
 	
 ## Technologies
 Project is created with:
 * Unity 2019.4.3f1
-* Ipsum version: 2.33
-* Ament library version: 999
 
 ## Diamond-Square implementation
+For the Diamond Square algorithm, the corners of the grid is set to a random value in a specified range. Then the centre of these 4 points is set to the average of the heights of the corners, this is known as the diamond step. Then for each 'square', the center of the vertices is set to the average of the vertices (Note: For points on the edge, only 3 points are used), this is the square step. Due to the nature of needing to find a middle point between the 3/4 vertices, the grid must be 2^n+1 size.
 
-You can include a code snippet here, but make sure to explain it! 
-Do not just copy all your code, only explain the important parts.
-
+This section of code shows the operation of applying Step() which implements the diamond and square step on each separate square of the grid with decreasing size.
+```c#
+    for(int i = 0; i < nVal; i++)
+		{
+            int sqrtSquares = (int)Math.Pow(2, i);
+            float divided = (gridSize - 1) / sqrtSquares;
+            for(int j = 0; j < sqrtSquares; j++)
+			{
+                for(int k = 0; k < sqrtSquares; k++)
+				{
+                    Vector2 p1 = new Vector2(k, j) * divided;
+                    Vector2 p3 = new Vector2(k + 1, j + 1) * divided;
+                    Step(p1, p3);
+				}
+			}
+            LowerHeight();
+		}
 A single method was used to find the average height of related points:
 Get the displacement vector between the point of interest and another point which is the based midpoint in the case of a square step, then perform a rotation for 0, 90, 180, 270 degrees on the displacement vector, this will get the four/three points that enclose the point and check if each point is in the grid: at most there will be one missing. Then find the average of these points and assign it to the point of interest. 
 
@@ -118,9 +131,9 @@ You can use emojis :+1: but do not over use it, we are looking for professional 
 **Now Get ready to complete all the tasks:**
 
 - [x] Read the handout for Project-1 carefully
-- [ ] Modelling of fractal landscape
-- [ ] Camera motion 
-- [ ] Surface properties
+- [x] Modelling of fractal landscape
+- [x] Camera motion 
+- [x] Surface properties
 - [ ] Project organisation and documentation
 
 ## Median Filter
