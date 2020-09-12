@@ -55,6 +55,7 @@ This section of code shows the operation of applying Step() which implements the
 			}
             LowerHeight();
 		}
+```
 A single method was used to find the average height of related points:
 Get the displacement vector between the point of interest and another point which is the based midpoint in the case of a square step, then perform a rotation for 0, 90, 180, 270 degrees on the displacement vector, this will get the four/three points that enclose the point and check if each point is in the grid: at most there will be one missing. Then find the average of these points and assign it to the point of interest. 
 
