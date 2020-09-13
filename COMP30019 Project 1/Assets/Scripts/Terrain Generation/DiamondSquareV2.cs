@@ -79,7 +79,7 @@ public class DiamondSquareV2 : MonoBehaviour
 
         // Pass new heights to shader
         material.SetFloat("_avgheight", AvgHeight);
-        material.SetFloat("_maxheight", highestCornerHeight);
+        material.SetFloat("_maxheight", verts.maxHeight());
         
     }
     void GenerateVertsTriangles()

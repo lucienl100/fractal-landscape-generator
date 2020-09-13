@@ -70,6 +70,10 @@
 
             float4 frag(vertOut v) : COLOR
             {   
+                // Variables that adjust when darkness comes based on height of sun. 
+				float distancebelowzerobeforeunder = 80; // how low under 0 to be dark mode
+				float amblevelwhenunder = 0.5; // amount of amb light
+                
                 float3 ddxPos = ddx(v.worldVertex);
                 float3 ddyPos = ddy(v.worldVertex) * _ProjectionParams.x;
                 float3 interpolatedNormal = normalize(cross(ddxPos, ddyPos));
@@ -90,9 +94,17 @@
 
                 float3 spe = _fAtt * _PointLightColor.rgb * _Ks * pow(saturate(dot(interpolatedNormal, H)), _specN);
 
+                
                 // Combine Phong illumination model components
                 float4 color;
-                color.rgb = amb.rgb + dif.rgb + spe.rgb;
+				if (_PointLightPosition.y > 0) {
+                    // If sun above y = 0
+                	color.rgb = amb.rgb + dif.rgb + spe.rgb;
+				} else {
+                    // If sun below y = 0
+                    float factor = clamp((_PointLightPosition.y+distancebelowzerobeforeunder)/distancebelowzerobeforeunder, 0, 1);
+					color.rgb = clamp((factor),amblevelwhenunder,1) * (amb.rgb) + factor*(dif.rgb + spe.rgb);
+				}
                 color.a = v.color.a;
 
                 return color;
