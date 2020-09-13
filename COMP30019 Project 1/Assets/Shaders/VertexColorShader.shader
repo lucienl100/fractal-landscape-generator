@@ -12,7 +12,7 @@ Shader "Unlit/VertexColorShader"
         _Ks ("Ks", Range(0,5)) = 0.5
         _specN ("SpecularN", Range(1,20)) = 5
         _PointLightColor ("Point Light Color", Color) = (1, 1, 1)
-        _PointLightPosition ("Point Light Position", Vector) = (0.0, 100.0, 0.0)
+        _PointLightPosition ("Point Light Position", Vector) = (0.0, 0.0, 0.0)
     }
 
 	SubShader
@@ -71,33 +71,51 @@ Shader "Unlit/VertexColorShader"
 			// Implementation of the fragment shader
 			fixed4 frag(vertOut v) : SV_Target
 			{
-				float snowheight;
-				// float heightweight = 0.7;
-				// snowheight = _avgheight+heightweight*(_maxheight - _avgheight);
-				snowheight = _maxheight - (_maxheight - _avgheight)/4;
-				float sealevel = _avgheight + 5;
-				float x = 1.0;
-				float y = 1.0;
+
+				// Adjust weights of sealevels and snow
+				float snowweight = 0.5;
+				float snowtobrownblur = 4; // higher = more blurry snow edge
+				float heightabovesealevel = 5; // this value increases sealevel by addition
+				float noiseweight = 0.25; // higher = more colour noise
+				float noisesize = 10; // higher = noise waves bigger
+
+				// Variables that adjust when darkness comes based on height of sun. 
+				float distancebelowzerobeforeunder = 80; // how low under 0 to be dark mode
+				float amblevelwhenunder = 0.5; // amount of amb light
+
+				float snowheight = _maxheight-snowweight*(_maxheight - _avgheight);
+				float sealevel = _avgheight + heightabovesealevel;
+
 				float3 green = float3(0.3f, 0.8f, 0.1f);
 				float3 brown = float3(0.7f, 0.5f, 0.3f);
 				float3 white = float3(1.0f, 1.0f, 1.0f);
 				float3 sand = float3(0.8f, 0.8f, 0.4f);
-
+				float3 brown2whitediff = white - brown;
+				float3 white2browndiff = brown - white;
 				float3 brown2greendiff = green - brown;
 				float3 green2sanddiff = sand - green;
 				
+				float factor = 1.0;
                 if (v.worldVertex.y > sin(v.worldVertex.x*v.worldVertex.z/500)+snowheight) {
 					// White down to snow height
-					v.color.rgb = white;
+					factor = clamp(2/(v.worldVertex.y-(sin(v.worldVertex.x*v.worldVertex.z/500)+snowheight)), 0, 1);
+					v.color.rgb = white + factor*white2browndiff;
 				} else if (v.worldVertex.y  > (sealevel)) {
 					// Gradient brown to green until reached avg + 5
-					y = clamp(((snowheight - v.worldVertex.y))/(snowheight-sealevel), 0, 1);
-					v.color.rgb = brown + y*brown2greendiff;
+					factor = clamp(((snowheight - v.worldVertex.y))/(snowheight-sealevel), 0, 1);
+					v.color.rgb = brown + factor*(brown2greendiff);
 				} else {
 					// Green to sand
-					x = clamp(((sealevel - v.worldVertex.y))/(4), 0, 1);
-					v.color.rgb = green + x*green2sanddiff;
+					factor = clamp(((sealevel - v.worldVertex.y))/snowtobrownblur, 0, 1);
+					v.color.rgb = green + factor*green2sanddiff;
 				} 
+
+				// Add subtle noise to entire area above sea level.
+				if (v.worldVertex.y  > (sealevel)) {	
+					factor = clamp(((snowheight - v.worldVertex.y))/(snowheight-sealevel), 0, 1);
+					float noise = clamp(cos(sin((v.worldVertex.x - v.worldVertex.z)/noisesize) - (v.worldVertex.x + v.worldVertex.z)/noisesize), 0, 1);
+					v.color.rgb += noiseweight*(1-factor)*(noise)*brown2whitediff;
+				}
 
 				v.color.a = 1.0f;
 				
@@ -116,9 +134,17 @@ Shader "Unlit/VertexColorShader"
 
                 float3 spe = _fAtt * _PointLightColor.rgb * _Ks * pow(saturate(dot(interpolatedNormal, H)), _specN);
 
+				
                 // Combine Phong illumination model components
                 float4 color;
-                color.rgb = amb.rgb + dif.rgb + spe.rgb;
+				if (_PointLightPosition.y > 0) {
+					// If sun above y = 0
+                	color.rgb = amb.rgb + dif.rgb + spe.rgb;
+				} else {
+					// If sun below y = 0
+					factor = clamp(((_PointLightPosition.y+distancebelowzerobeforeunder)/distancebelowzerobeforeunder), 0, 1);
+					color.rgb = clamp((factor),amblevelwhenunder,1) * (amb.rgb) + factor*(dif.rgb + spe.rgb);
+				}
                 color.a = v.color.a;
 
                 return color;

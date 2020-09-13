@@ -85,4 +85,16 @@ public class HeightGrid
 		return output;
 	}
 
+	public float maxHeight() {
+		float max = 0;
+		// Find max height of entire grid
+		for(int i=0;i<size;i++) {
+			for(int j=0;j<size;j++) {
+				max = Math.Max(this.GetHeight(new Vector2(i,j)),max);
+			}
+		}
+		return max;
+		
+	}
+
 }
