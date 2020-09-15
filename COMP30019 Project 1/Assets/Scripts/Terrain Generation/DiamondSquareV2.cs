@@ -86,7 +86,7 @@ public class DiamondSquareV2 : MonoBehaviour
 	{
         //  Creates all of the verticies, triangles
         //  Allows for us to change the x/z distance between points
-        float dIncrement = mapScalar / (gridSize - 1); //  192 
+        float dIncrement = mapScalar / (gridSize - 1);
         verts.SetScale(dIncrement);
         int triIndex = 0;
 

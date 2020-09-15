@@ -750,7 +750,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   resolution: 80
-  mapScalar: 256
+  mapScalar: 257
   waterTexture: {fileID: 2100000, guid: f237ca025dd73b444a9c0b2e8675f3f2, type: 2}
   texture: {fileID: 0}
   normalMap: {fileID: 0}
@@ -798,7 +798,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f9e4172edf1f4c04086f1e7e253f833b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spinSpeed: 40
+  spinSpeed: 20
   terrainGenerator: {fileID: 1511379382}
 --- !u!4 &1626612468
 Transform:

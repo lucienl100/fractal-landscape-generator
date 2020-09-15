@@ -6,7 +6,7 @@ public class Waves : MonoBehaviour
 {
     // Start is called before the first frame update
     [Range(0, 257)]public int resolution = 50;
-    public float mapScalar = 256f;
+    public float mapScalar = 257f;
     private float waterLevel = -1f;
     public Material waterTexture;
     public Texture2D texture;

@@ -2,7 +2,7 @@
 {
     Properties
     {
-        _Color("Color", Color) = (0.4, 0.5, 0.8, 1)
+        _Color("Color", Color) = (0.30, 0.850, 0.95, 0.55)
         _Strength("Strength", Range(0,5)) = 1
         _Speed("Speed", Range(-100, 100)) = 25
         _Spread("Spread", Range(0, 1)) = 0.5
@@ -51,6 +51,7 @@
                 float4 vertex : SV_POSITION;
                 float4 color : COLOR;
                 float4 worldVertex : TEXCOORD0;
+                float3 worldNormal : TEXCOORD1;
 				// float3 worldNormal : TEXCOORD1;
             };
 
@@ -60,8 +61,16 @@
 				float4 worldVertex = mul(unity_ObjectToWorld, IN.vertex);
                 // float3 worldNormal = normalize(mul(transpose((float3x3)unity_WorldToObject), v.normal.xyz));
                 float noise = cos((0.5*sin((worldVertex.x - worldVertex.z)* _Spread) - (worldVertex.x + worldVertex.z) * _Spread) + (_Speed * _Time));
+                float s = (_Spread-_Spread*cos(_Spread*(worldVertex.x+worldVertex.z))/2);
+                float dfdx = s*sin(sin(_Spread*(worldVertex.x+worldVertex.z))/2-(_Spread*(worldVertex.x+worldVertex.z))+(_Speed*_Time));
+                float dfdz = s*sin(sin(_Spread*(worldVertex.x+worldVertex.z))/2-(_Spread*(worldVertex.x+worldVertex.z))+(_Speed*_Time));
                 //float noise = sin(worldVertex.x/10 + _Time*100);
+                float3 tx = float3(1, dfdx, 0);
+                float3 tz = float3(0, dfdz, 1);
+                float3 normal = cross(tz, tx);
+                o.worldNormal = normalize(normal);
                 worldVertex.y = worldVertex.y + noise * _Strength;
+                
                 o.worldVertex = worldVertex;
                 o.vertex = mul(UNITY_MATRIX_VP, worldVertex);
                 o.color = _Color;
@@ -76,8 +85,8 @@
                 
                 float3 ddxPos = ddx(v.worldVertex);
                 float3 ddyPos = ddy(v.worldVertex) * _ProjectionParams.x;
-                float3 interpolatedNormal = normalize(cross(ddxPos, ddyPos));
-                //float3 interpolatedNormal = normalize(v.worldNormal);
+                //float3 interpolatedNormal = normalize(cross(ddxPos, ddyPos));
+                float3 interpolatedNormal = normalize(v.worldNormal);
                 
 				
                 // Calculate ambient RGB intensities

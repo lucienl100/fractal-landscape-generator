@@ -75,13 +75,13 @@ Material:
     - _SrcBlend: 1
     - _UVSec: 0
     - _ZWrite: 1
-    - _avgheight: -17.787144
+    - _avgheight: -17.224985
     - _fAtt: 1
     - _height: 17.403847
-    - _maxheight: 63.729824
+    - _maxheight: 73.97513
     - _specN: 1
     m_Colors:
     - _Color: {r: 0.46293166, g: 0.9528302, b: 0.57690156, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _PointLightColor: {r: 0.5566038, g: 0.5566038, b: 0.5566038, a: 0}
-    - _PointLightPosition: {r: 128.5, g: -201.46536, b: -29.44838, a: 0}
+    - _PointLightPosition: {r: 128.5, g: -148.54636, b: -79.99455, a: 0}
