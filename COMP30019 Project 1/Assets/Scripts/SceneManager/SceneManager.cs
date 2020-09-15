@@ -5,7 +5,6 @@ using Random = UnityEngine.Random;
 public class SceneManager : MonoBehaviour
 {
     // Start is called before the first frame update
-    private float randHeightDiff = 1.5f;
     private float terrainMaxHeight;
     public GameObject terrainGenerator;
     public Transform player;
