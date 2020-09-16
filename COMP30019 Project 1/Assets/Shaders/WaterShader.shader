@@ -2,15 +2,15 @@
 {
     Properties
     {
-        _Color("Color", Color) = (0.30, 0.850, 0.95, 0.55)
-        _Strength("Strength", Range(0,5)) = 1
-        _Speed("Speed", Range(-100, 100)) = 25
-        _Spread("Spread", Range(0, 1)) = 0.5
+        _Color("Color", Color) = (0.30, 0.850, 0.95, 0.7)
+        _Strength("Strength", Range(0,5)) = 0.9
+        _Speed("Speed", Range(-100, 100)) = 20
+        _Spread("Spread", Range(0, 1)) = 0.15
         _fAtt ("fAtt", Range(0,5)) = 1
         _Ka ("Ambient relfection constant",Range(0,5)) = 1
         _Kd ("Diffuse reflection constant",Range(0,5)) = 1
-        _Ks ("Ks", Range(0,5)) = 0.5
-        _specN ("SpecularN", Range(1,20)) = 5
+        _Ks ("Ks", Range(0,10)) = 3
+        _specN ("SpecularN", Range(1,500)) = 200
         _PointLightColor ("Point Light Color", Color) = (1, 1, 1)
         _PointLightPosition ("Point Light Position", Vector) = (0.0, 100.0, 0.0)
     }
@@ -52,26 +52,32 @@
                 float4 color : COLOR;
                 float4 worldVertex : TEXCOORD0;
                 float3 worldNormal : TEXCOORD1;
-				// float3 worldNormal : TEXCOORD1;
             };
 
             vertOut vert(vertIn IN)
             {
                 vertOut o;
+                // Pass world vertexes 
 				float4 worldVertex = mul(unity_ObjectToWorld, IN.vertex);
-                // float3 worldNormal = normalize(mul(transpose((float3x3)unity_WorldToObject), v.normal.xyz));
-                float noise = cos((0.5*sin((worldVertex.x - worldVertex.z)* _Spread) - (worldVertex.x + worldVertex.z) * _Spread) + (_Speed * _Time));
-                float s = (_Spread-_Spread*cos(_Spread*(worldVertex.x+worldVertex.z))/2);
-                float dfdx = s*sin(sin(_Spread*(worldVertex.x+worldVertex.z))/2-(_Spread*(worldVertex.x+worldVertex.z))+(_Speed*_Time));
-                float dfdz = s*sin(sin(_Spread*(worldVertex.x+worldVertex.z))/2-(_Spread*(worldVertex.x+worldVertex.z))+(_Speed*_Time));
-                //float noise = sin(worldVertex.x/10 + _Time*100);
-                float3 tx = float3(1, dfdx, 0);
-                float3 tz = float3(0, dfdz, 1);
-                float3 normal = cross(tz, tx);
-                o.worldNormal = normalize(normal);
-                worldVertex.y = worldVertex.y + noise * _Strength;
-                
                 o.worldVertex = worldVertex;
+
+                /* Alternative water noise formula */
+                // float noise = cos((0.5*sin((worldVertex.x - worldVertex.z)* _Spread) - (worldVertex.x + worldVertex.z) * _Spread) + (_Speed * _Time));
+                // float s = (_Spread-_Spread*cos(_Spread*(worldVertex.x+worldVertex.z))/2);
+                // float dfdx = s*sin(sin(_Spread*(worldVertex.x+worldVertex.z))/2-(_Spread*(worldVertex.x+worldVertex.z))+(_Speed*_Time));
+                // float dfdz = s*sin(sin(_Spread*(worldVertex.x+worldVertex.z))/2-(_Spread*(worldVertex.x+worldVertex.z))+(_Speed*_Time));
+
+                // Calculate water waves/noise and tangents
+                float noise = _Strength*(sin(worldVertex.x*_Spread+_Time*_Speed) + sin(worldVertex.z*_Spread+_Time*_Speed));
+                worldVertex.y = worldVertex.y + noise * _Strength;
+
+                float dnoisedx = _Strength*(cos(worldVertex.x*_Spread+_Time*_Speed)*_Spread);
+                float dnoisedz = _Strength*(cos(worldVertex.z*_Spread+_Time*_Speed)*_Spread);
+                float3 tx = float3(1, dnoisedx, 0);
+                float3 tz = float3(0, dnoisedz, 1);
+
+                // Cross product tangents to form normals and pass through vertex & colour data
+                o.worldNormal = normalize(cross(tz, tx));
                 o.vertex = mul(UNITY_MATRIX_VP, worldVertex);
                 o.color = _Color;
                 return o;
@@ -80,20 +86,21 @@
             float4 frag(vertOut v) : COLOR
             {   
                 // Variables that adjust when darkness comes based on height of sun. 
-				float distancebelowzerobeforeunder = 80; // how low under 0 to be dark mode
-				float amblevelwhenunder = 0.5; // amount of amb light
+				float DISTANCEBELOWZERO = 80; // how low under 0 to be dark mode
+				float AMBLEVELWHENUNDER = 0.5; // amount of amb light
                 
-                float3 ddxPos = ddx(v.worldVertex);
-                float3 ddyPos = ddy(v.worldVertex) * _ProjectionParams.x;
-                //float3 interpolatedNormal = normalize(cross(ddxPos, ddyPos));
+                // Incorrect no interpolation in fragment tangent calculator
+                // float3 ddxPos = ddx(v.worldVertex);
+                // float3 ddyPos = ddy(v.worldVertex) * _ProjectionParams.x;
+                // float3 interpolatedNormal = normalize(cross(ddxPos, ddyPos));
+
+                // Interpolate normals
                 float3 interpolatedNormal = normalize(v.worldNormal);
-                
 				
                 // Calculate ambient RGB intensities
                 float3 amb = v.color.rgb * UNITY_LIGHTMODEL_AMBIENT.rgb * _Ka;
 
-                // Calculate diffuse RBG reflections, we save the results of L.N because we will use it again
-                // (when calculating the reflected ray in our specular component)
+                // Calculate diffuse RBG reflections, we save the results of L.N because we will use it again for specular
                 float3 L = normalize(_PointLightPosition - v.worldVertex.xyz);
                 float LdotN = dot(L, interpolatedNormal);
                 float3 dif = _fAtt * _PointLightColor.rgb * _Kd * v.color.rgb * saturate(LdotN);
@@ -101,9 +108,9 @@
                 float3 V = normalize(_WorldSpaceCameraPos - v.worldVertex.xyz);
                 float3 H = normalize(V + L);
 
+                // Calculate specular
                 float3 spe = _fAtt * _PointLightColor.rgb * _Ks * pow(saturate(dot(interpolatedNormal, H)), _specN);
 
-                
                 // Combine Phong illumination model components
                 float4 color;
 				if (_PointLightPosition.y > 0) {
@@ -111,11 +118,11 @@
                 	color.rgb = amb.rgb + dif.rgb + spe.rgb;
 				} else {
                     // If sun below y = 0
-                    float factor = clamp((_PointLightPosition.y+distancebelowzerobeforeunder)/distancebelowzerobeforeunder, 0, 1);
-					color.rgb = clamp((factor),amblevelwhenunder,1) * (amb.rgb) + factor*(dif.rgb + spe.rgb);
+                    float factor = clamp((_PointLightPosition.y+DISTANCEBELOWZERO)/DISTANCEBELOWZERO, 0, 1);
+					color.rgb = clamp((factor),AMBLEVELWHENUNDER,1) * (amb.rgb) + factor*(dif.rgb + spe.rgb);
 				}
-                color.a = v.color.a;
 
+                color.a = v.color.a;
                 return color;
             }
             ENDCG

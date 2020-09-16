@@ -718,7 +718,7 @@ MonoBehaviour:
   randomTHeight: 0
   meshCollider: {fileID: 0}
   material: {fileID: 2100000, guid: 179f1e5982d2ab44f9cd8864647ea60f, type: 2}
-  useMedianFilter: 0
+  useMedianFilter: 1
   pointLight: {fileID: 886670362}
 --- !u!1 &1512205900
 GameObject:
@@ -749,7 +749,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c41ab21404488b498b578c4f9d2ff09, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  resolution: 80
+  resolution: 160
   mapScalar: 257
   waterTexture: {fileID: 2100000, guid: f237ca025dd73b444a9c0b2e8675f3f2, type: 2}
   texture: {fileID: 0}
