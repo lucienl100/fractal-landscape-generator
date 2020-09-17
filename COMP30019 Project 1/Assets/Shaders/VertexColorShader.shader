@@ -9,7 +9,7 @@ Shader "Unlit/VertexColorShader"
 		_fAtt ("fAtt", Range(0,5)) = 1
         _Ka ("Ambient relfection constant",Range(0,5)) = 1.5
         _Kd ("Diffuse reflection constant",Range(0,5)) = 1
-        _Ks ("Ks", Range(0,5)) = 0.1
+        _Ks ("Ks", Range(0,5)) = 0.2
         _specN ("SpecularN", Range(1,20)) = 1
         _PointLightColor ("Point Light Color", Color) = (1, 1, 1)
         _PointLightPosition ("Point Light Position", Vector) = (0.0, 0.0, 0.0)
@@ -78,8 +78,8 @@ Shader "Unlit/VertexColorShader"
 				float SNOWWEIGHT = 0.5;
 				float SNOWTOBROWNBLUR = 4; // higher = more blurry snow edge
 				float HEIGHTABOVESEALEVEL = 5.5; // this value increases sealevel by addition
-				float NOISEWEIGHT = 0.25; // higher = more colour noise
-				float NOISESIZE = 10; // higher = noise waves bigger
+				float NOISEWEIGHT = 0.1; // higher = more colour noise
+				float NOISESIZE = 20; // higher = noise waves bigger
 
 				// Variables that adjust when darkness comes based on height of sun. 
 				float DISTANCEBELOWZERO = 80; // how low under 0 to be dark mode
