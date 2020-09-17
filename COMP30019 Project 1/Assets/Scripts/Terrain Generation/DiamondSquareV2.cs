@@ -21,11 +21,12 @@ public class DiamondSquareV2 : MonoBehaviour
     private int windowWidth = 9;
     private float maxHeight;
     public float AvgHeight;
+    private float currentMaxHeight;
     public float randomTHeight;
     
     public MeshCollider meshCollider;
     public Material material;
-    public bool useMedianFilter = true;
+    public bool useMedianFilter = false;
     public PointLight pointLight;
     
     void Awake()
@@ -45,6 +46,10 @@ public class DiamondSquareV2 : MonoBehaviour
 
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            useMedianFilter = !useMedianFilter;
+        }
         // Pass updated light positions to shader
         material.SetColor("_PointLightColor", this.pointLight.color);
         material.SetVector("_PointLightPosition", this.pointLight.GetWorldPosition());
@@ -61,6 +66,7 @@ public class DiamondSquareV2 : MonoBehaviour
     public void GenerateMesh()
 	{
         maxHeight = baseMaxHeight;
+        currentMaxHeight = -baseMaxHeight;
         //  Generate x and z coords for all points in the grid, connect triangles with each other
         GenerateVertsTriangles();
 
@@ -75,11 +81,10 @@ public class DiamondSquareV2 : MonoBehaviour
         mesh.RecalculateNormals();
         meshCollider.sharedMesh = mesh;
         AvgHeight = GetAvgHeight();
-        randomTHeight =  0.5f * AvgHeight;
 
         // Pass new heights to shader
         material.SetFloat("_avgheight", AvgHeight);
-        material.SetFloat("_maxheight", verts.maxHeight());
+        material.SetFloat("_maxheight", currentMaxHeight);
         
     }
     void GenerateVertsTriangles()
@@ -203,8 +208,11 @@ public class DiamondSquareV2 : MonoBehaviour
         foreach (Vector2 v in vs)
         {
            verts.SetHeight(v, RandomInitialHeight());
+           if (verts.GetHeight(v) > currentMaxHeight)
+           {
+               currentMaxHeight = verts.GetHeight(v);
+           }
         }
-        highestCornerHeight = Mathf.Max(verts.GetHeight(vs[0]), verts.GetHeight(vs[1]), verts.GetHeight(vs[2]), verts.GetHeight(vs[3]));
 
         LowerHeight();
         for(int i = 0; i < nVal; i++)
@@ -275,6 +283,10 @@ public class DiamondSquareV2 : MonoBehaviour
         foreach (Vector2 v in diamondCorners)
         {
             verts.SetHeight(v, AverageHeight(v, mp) + RandomHeight());
+            if (verts.GetHeight(v) > currentMaxHeight)
+           {
+               currentMaxHeight = verts.GetHeight(v);
+           }
         }
     }
 

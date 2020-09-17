@@ -65,7 +65,7 @@ Material:
     - _GlossyReflections: 1
     - _Ka: 1.5
     - _Kd: 1
-    - _Ks: 0.1
+    - _Ks: 0.2
     - _Metallic: 0.58
     - _Mode: 0
     - _OcclusionStrength: 1
@@ -75,13 +75,13 @@ Material:
     - _SrcBlend: 1
     - _UVSec: 0
     - _ZWrite: 1
-    - _avgheight: 30.835339
+    - _avgheight: 30.623846
     - _fAtt: 1
     - _height: 17.403847
-    - _maxheight: 67.37941
+    - _maxheight: 76.65418
     - _specN: 1
     m_Colors:
     - _Color: {r: 0.46293166, g: 0.9528302, b: 0.57690156, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _PointLightColor: {r: 0.5566038, g: 0.5566038, b: 0.5566038, a: 0}
-    - _PointLightPosition: {r: 128.5, g: 253.9055, b: 161.18015, a: 0}
+    - _PointLightPosition: {r: 128.5, g: 251.49332, b: 80.67628, a: 0}
