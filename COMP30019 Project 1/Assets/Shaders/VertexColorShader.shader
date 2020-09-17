@@ -72,6 +72,7 @@ Shader "Unlit/VertexColorShader"
 			// Implementation of the fragment shader
 			fixed4 frag(vertOut v) : SV_Target
 			{
+				float actualMaxHeight = _maxheight - _avgheight;
 
 				// Adjust weights of sealevels and snow
 				float SNOWWEIGHT = 0.5;
@@ -94,8 +95,8 @@ Shader "Unlit/VertexColorShader"
 				float3 brown2greendiff = green - brown;
 				float3 green2sanddiff = sand - green;
 
-				float snowheight = _maxheight-SNOWWEIGHT*(_maxheight - _avgheight);
-				float sealevel = _avgheight + HEIGHTABOVESEALEVEL;
+				float snowheight = actualMaxHeight-SNOWWEIGHT*(actualMaxHeight);
+				float sealevel = HEIGHTABOVESEALEVEL;
 				float factor;
 
                 if (v.worldVertex.y > sin(v.worldVertex.x*v.worldVertex.z/500)+snowheight) {
