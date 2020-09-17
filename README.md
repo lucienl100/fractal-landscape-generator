@@ -19,13 +19,13 @@ this is just an example of different formating tools available for you. For help
 
 | Name | Task | State |
 | :---         |     :---:      |          ---: |
-| Nathan Rearick  | Diamond Square     |  ![99%](https://progress-bar.dev/99) |
-| Nathan Rearick  | Camera Movement     |  ![99%](https://progress-bar.dev/99) |
-| Lucien Lu    | Water and Water Shader      |  ![99%](https://progress-bar.dev/99) |
-| Lucien Lu    | Scene Manager    |  ![99%](https://progress-bar.dev/99) |
-| Lucien Lu    | Median Filter    |  ![99%](https://progress-bar.dev/99) |
-| Timmy Truong    | Shaders     |  ![99%](https://progress-bar.dev/99) |
-| Timmy Truong    | Sun     |  ![90%](https://progress-bar.dev/90) |
+| Nathan Rearick  | Diamond Square     |  ![95%](https://progress-bar.dev/95) |
+| Nathan Rearick  | Camera Movement     |  ![95%](https://progress-bar.dev/95) |
+| Lucien Lu    | Water and Water Shader      |  ![95%](https://progress-bar.dev/95) |
+| Lucien Lu    | Scene Manager    |  ![95%](https://progress-bar.dev/95) |
+| Lucien Lu    | Median Filter    |  ![95%](https://progress-bar.dev/95) |
+| Timmy Truong    | Shaders     |  ![70%](https://progress-bar.dev/70) |
+| Timmy Truong    | Sun     |  ![80%](https://progress-bar.dev/80) |
 
 ## General info
 This is project - 1 ...
@@ -36,9 +36,9 @@ Project is created with:
 * Unity 2019.4.3f1
 
 ## Diamond-Square implementation
-For the Diamond Square algorithm, the corners of the grid is set to a random value in a specified range. Then the centre of these 4 points is set to the average of the heights of the corners, this is known as the diamond step. Then for each 'square', the center of the vertices is set to the average of the vertices (Note: For points on the edge, only 3 points are used), this is the square step. Due to the nature of needing to find a middle point between the 3/4 vertices, the grid must be 2^n+1 size.
+For the Diamond Square algorithm, the corners of the grid is set to a random value in a specified range. Then the centre of these 4 points is set to the average of the heights of the corners, this is known as the diamond step. Then for each 'diamond', the center of the vertices is set to the average of the diamond's points (Note: For points on the edge, only 3 points are used), this is the square step. After both of these steps are completed, the grid is then split into 4 equally sized grids, and the algorithm repeats for each grid. This processes continues until the size of each grid has a side length of 1, which results in every point in the original grid to be designated a specific height.
 
-This section of code shows the operation of applying Step() which implements the diamond and square step on each separate square of the grid with decreasing size.
+This section of code shows the use of a double nested for loop which will inspect every grid in the original grid, conduct both steps on itself, then essentially 'splits' into 4 smaller grids, this is repeated n amount of times. The reason why the original square grid has to have ((2^n) + 1) points per row is because it is the only set of dimensions that allow for the grid to evenly divide into 4 smaller grids until each length is 1.
 ```c#
     for(int i = 0; i < nVal; i++)
 		{
@@ -46,8 +46,10 @@ This section of code shows the operation of applying Step() which implements the
             float divided = (gridSize - 1) / sqrtSquares;
             for(int j = 0; j < sqrtSquares; j++)
 			{
+		//  Every row of squares
                 for(int k = 0; k < sqrtSquares; k++)
 				{
+		    //  Every square in the row
                     Vector2 p1 = new Vector2(k, j) * divided;
                     Vector2 p3 = new Vector2(k + 1, j + 1) * divided;
                     Step(p1, p3);
@@ -57,7 +59,7 @@ This section of code shows the operation of applying Step() which implements the
 		}
 ```
 A single method was used to find the average height of related points:
-Get the displacement vector between the point of interest and another point which is the based midpoint in the case of a square step, then perform a rotation for 0, 90, 180, 270 degrees on the displacement vector, this will get the four/three points that enclose the point and check if each point is in the grid: at most there will be one missing. Then find the average of these points and assign it to the point of interest. 
+To find the few corner points of interest, a displacement vector between a given corner and the local centre point of the grid is created. The corners are found by adding the deplacement vector with the local centre point, then rotating the displacement vector by 90 degrees after each time. If the inspected point is inside the original grid, its height is then added to a sum, so that the mean of the valid points can be calculated. Thus, the new point's height will equal to the mean height of these points, plus a random value (the range of this random value decreases after every full loop).
 
 Code:
 
