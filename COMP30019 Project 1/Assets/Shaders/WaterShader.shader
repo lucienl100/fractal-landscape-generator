@@ -9,9 +9,9 @@
         _timeSpreadHeight("_timeSpreadHeight", Range(0,1)) = 0.4
         _Speed("Speed", Range(-100, 100)) = 15
         _Spread("Spread", Range(0, 1)) = 0.1
-        _fAtt ("fAtt", Range(0,5)) = 1
+        _fAtt ("fAtt", Range(0,5)) = 1.5
         _Ka ("Ambient relfection constant",Range(0,5)) = 1
-        _Kd ("Diffuse reflection constant",Range(0,5)) = 1.4
+        _Kd ("Diffuse reflection constant",Range(0,5)) = 1
         _Ks ("Ks", Range(0,10)) = 3
         _specN ("SpecularN", Range(1,500)) = 350
         _PointLightColor ("Point Light Color", Color) = (1, 1, 1)
@@ -65,7 +65,7 @@
                 vertOut o;
                 // Pass world vertexes 
 				float4 worldVertex = mul(unity_ObjectToWorld, IN.vertex);
-                o.worldVertex = worldVertex;
+                
 
                 /* Alternative water noise formula */
                 // float noise = cos((0.5*sin((worldVertex.x - worldVertex.z)* _Spread) - (worldVertex.x + worldVertex.z) * _Spread) + (_Speed * _Time));
@@ -82,7 +82,7 @@
                 //Get the tangent vectors
                 float3 tx = float3(1, dnoisedx, 0);
                 float3 tz = float3(0, dnoisedz, 1);
-
+                o.worldVertex = worldVertex;
                 // Cross product tangents to form normals and pass through vertex & colour data
                 o.worldNormal = normalize(cross(tz, tx));
                 o.vertex = mul(UNITY_MATRIX_VP, worldVertex);
