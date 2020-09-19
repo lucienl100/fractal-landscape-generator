@@ -19,13 +19,13 @@ this is just an example of different formating tools available for you. For help
 
 | Name | Task | State |
 | :---         |     :---:      |          ---: |
-| Nathan Rearick  | Diamond Square     |  ![95%](https://progress-bar.dev/95) |
-| Nathan Rearick  | Camera Movement     |  ![95%](https://progress-bar.dev/95) |
-| Lucien Lu    | Water and Water Shader      |  ![95%](https://progress-bar.dev/95) |
-| Lucien Lu    | Scene Manager    |  ![95%](https://progress-bar.dev/95) |
-| Lucien Lu    | Median Filter    |  ![95%](https://progress-bar.dev/95) |
-| Timmy Truong    | Shaders     |  ![70%](https://progress-bar.dev/70) |
-| Timmy Truong    | Sun     |  ![80%](https://progress-bar.dev/80) |
+| Nathan Rearick  | Diamond Square     |  ![100%](https://progress-bar.dev/100) |
+| Nathan Rearick  | Camera Movement     |  ![100%](https://progress-bar.dev/100) |
+| Lucien Lu    | Water and Water Shader      |  ![95%](https://progress-bar.dev/100) |
+| Lucien Lu    | Scene Manager    |  ![100%](https://progress-bar.dev/100) |
+| Lucien Lu    | Median Filter    |  ![100%](https://progress-bar.dev/100) |
+| Timmy Truong    | Shaders     |  ![100%](https://progress-bar.dev/100) |
+| Timmy Truong    | Sun     |  ![100%](https://progress-bar.dev/100) |
 
 ## General info
 This is project - 1 ...
