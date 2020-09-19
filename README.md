@@ -8,11 +8,11 @@ this is just an example of different formating tools available for you. For help
 
 ## Table of contents
 * [Team Members](#team-members)
+* [Checklist](#Checklist)
 * [General Info](#general-info)
 * [Technologies](#technologies)
 * [Diamond-Square implementation](#diamond-square-implementation)
 * [Camera Motion](#camera-motion)
-* [Vertex Shader](#vertex-shader)
 * [Median Filter](#median-filter)
 
 ## Team Members
@@ -26,6 +26,18 @@ this is just an example of different formating tools available for you. For help
 | Lucien Lu    | Median Filter    |  ![100%](https://progress-bar.dev/100) |
 | Timmy Truong    | Shaders     |  ![100%](https://progress-bar.dev/100) |
 | Timmy Truong    | Sun     |  ![100%](https://progress-bar.dev/100) |
+
+## Checklist
+
+You can use emojis :+1: but do not over use it, we are looking for professional work. If you would not add them in your job, do not use them here! :shipit:
+
+**Now Get ready to complete all the tasks:**
+
+- [x] Read the handout for Project-1 carefully
+- [x] Modelling of fractal landscape
+- [x] Camera motion 
+- [x] Surface properties
+- [ ] Project organisation and documentation
 
 ## General info
 This is project - 1 ...
@@ -108,18 +120,6 @@ You can use images/gif by adding them to a folder in your repo:
 
 To create a gif from a video you can follow this [link](https://ezgif.com/video-to-gif/ezgif-6-55f4b3b086d4.mov).
 
-
-## Vertex Shader
-
-You can use emojis :+1: but do not over use it, we are looking for professional work. If you would not add them in your job, do not use them here! :shipit:
-
-**Now Get ready to complete all the tasks:**
-
-- [x] Read the handout for Project-1 carefully
-- [x] Modelling of fractal landscape
-- [x] Camera motion 
-- [x] Surface properties
-- [ ] Project organisation and documentation
 
 ## Median Filter
 
