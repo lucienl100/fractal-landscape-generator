@@ -8,7 +8,6 @@ this is just an example of different formating tools available for you. For help
 
 ## Table of contents
 * [Team Members](#team-members)
-* [Checklist](#Checklist)
 * [General Info](#general-info)
 * [Technologies](#technologies)
 * [Diamond-Square implementation](#diamond-square-implementation)
@@ -29,17 +28,6 @@ this is just an example of different formating tools available for you. For help
 | Timmy Truong    | Shaders     |  ![100%](https://progress-bar.dev/100) |
 | Timmy Truong    | Sun     |  ![100%](https://progress-bar.dev/100) |
 
-## Checklist
-
-You can use emojis :+1: but do not over use it, we are looking for professional work. If you would not add them in your job, do not use them here! :shipit:
-
-**Now Get ready to complete all the tasks:**
-
-- [x] Read the handout for Project-1 carefully
-- [x] Modelling of fractal landscape
-- [x] Camera motion 
-- [x] Surface properties
-- [ ] Project organisation and documentation
 
 ## General info
 This is project - 1 ...
@@ -49,6 +37,7 @@ Project 1 is an implementation of the Diamond Square algorithm and custom HLSL s
 Project is created with:
 * Unity 2019.4.3f1
 * Nvidia ShadowPlay
+
 ## Diamond-Square implementation
 For the Diamond Square algorithm, the corners of the grid is set to a random value in a specified range. Then the centre of these 4 points is set to the average of the heights of the corners, this is known as the diamond step. Then for each 'diamond', the center of the vertices is set to the average of the diamond's points (Note: For points on the edge, only 3 points are used), this is the square step. After both of these steps are completed, the grid is then split into 4 equally sized grids, and the algorithm repeats for each grid. This processes continues until the size of each grid has a side length of 1, which results in every point in the original grid to be designated a specific height.
 
@@ -162,15 +151,6 @@ The code section used for restricting camera movement:
 The while loop adjusts the intended player position above the terrain in the situation it gets too close, this allows for 'sliding' movement over the terrain.
 
 dPosition is the vector used to move the player.
-
-You can use images/gif by adding them to a folder in your repo:
-
-<p align="center">
-  <img src="Images/Q1-1.gif"  width="300" >
-</p>
-
-To create a gif from a video you can follow this [link](https://ezgif.com/video-to-gif/ezgif-6-55f4b3b086d4.mov).
-
 
 ## Median Filter
 
