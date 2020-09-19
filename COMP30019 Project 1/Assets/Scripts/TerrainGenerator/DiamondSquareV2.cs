@@ -7,7 +7,7 @@ using Random = UnityEngine.Random;
 
 public class DiamondSquareV2 : MonoBehaviour
 {
-    public float baseMaxHeight = 75.0f;
+    public float baseMaxHeight = 90.0f;
     [Range(2, 20)] public int nVal = 8;
     [Range(1.0f, 256.0f)] public float mapScalar = 257.0f;
     [Range(0.0f, 1.0f)] public float heightDecrement = 0.54f;
