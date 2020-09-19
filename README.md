@@ -21,7 +21,7 @@ this is just an example of different formating tools available for you. For help
 | :---         |     :---:      |          ---: |
 | Nathan Rearick  | Diamond Square     |  ![100%](https://progress-bar.dev/100) |
 | Nathan Rearick  | Camera Movement     |  ![100%](https://progress-bar.dev/100) |
-| Lucien Lu    | Water and Water Shader      |  ![95%](https://progress-bar.dev/100) |
+| Lucien Lu    | Water and Water Shader      |  ![100%](https://progress-bar.dev/100) |
 | Lucien Lu    | Scene Manager    |  ![100%](https://progress-bar.dev/100) |
 | Lucien Lu    | Median Filter    |  ![100%](https://progress-bar.dev/100) |
 | Timmy Truong    | Shaders     |  ![100%](https://progress-bar.dev/100) |
@@ -115,7 +115,7 @@ Code:
 You can use images/gif by adding them to a folder in your repo:
 
 <p align="center">
-  <img src="Gifs/Q1-1.gif"  width="300" >
+  <img src="Images/Q1-1.gif"  width="300" >
 </p>
 
 To create a gif from a video you can follow this [link](https://ezgif.com/video-to-gif/ezgif-6-55f4b3b086d4.mov).
@@ -125,8 +125,8 @@ To create a gif from a video you can follow this [link](https://ezgif.com/video-
 
 We decided to add an optional Median Filter to the terrain generation. This will increase computation time and loading time by approximately 1 second but results in a much smoother surface.
 <p align="left">
-  <img src="Gifs/nomedianfilter.gif"  width="300" >
-  <img src="Gifs/medianfilter.gif"  width="300" >
+  <img src="Images/nomedianfilter.gif"  width="300" >
+  <img src="Images/medianfilter.gif"  width="300" >
 </p>
 
 ```c#
