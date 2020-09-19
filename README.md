@@ -14,6 +14,8 @@ this is just an example of different formating tools available for you. For help
 * [Diamond-Square implementation](#diamond-square-implementation)
 * [Camera Motion](#camera-motion)
 * [Median Filter](#median-filter)
+* [Terrain Vertex Shader](#Terrain Vertex Shader)
+* [Water Shader](#Water Shader)
 
 ## Team Members
 
@@ -219,3 +221,45 @@ void MedianFilter()
         }
     }
 ```
+
+## Terrain Vertex Shader
+
+For the the illumination shader for the terrian, [Phong illumination model](https://en.wikipedia.org/wiki/Phong_reflection_model) was implemented in a custom Cg/HLSL shader. 
+
+<img src="Images/phongilluminationformula.png"  width="300" >
+
+In the formula we left the attenuation factor fatt to 1. For the constants (the three K) in the formula; we decided to turn ambient reflections a bit up to 1.5 while leaving diffuse to 1 so the shadows would not be too harsh and the specular constant down to 0.15 as we expected the terrain to not be very specular shiny/reflective to be realistic. The specular power was left at 1.
+
+The normals were generated using Recalculatenormals() method within the Terrian script and sent to the shader alongside the position and colour of the point light.
+
+Inside the fragment shader is where the colours of the terrain is set. It is based on two height values, the average height (which should be 0) and the maximum height. From these two values, two weighted values are calculated which are the snowheight and sandheight. These last two floats are used to choose where the final colours/gradients are. Above snowheight is all white while under it is brown which transitions to green. At sealevel which is a bit above the average height, green is above however below it fades to yellow sand.
+
+<img src="Images/heights.png"  width="300" >
+
+## Water Shader
+
+The water's movement was calculated within the water's vertex shader which displaces the height of the wave based on time and position using sin & cos waves.
+
+The mathematical formula used for the height displacement/noise is:
+
+```
+float noise = _Strength*(sin((worldVertex.z-_xSpread*worldVertex.x)*_Spread+_Time*_Speed)) + _Strength2*cos(_timeSpreadHeight*_Time*_Speed);
+worldVertex.y = worldVertex.y + noise;
+```
+
+Then the Phong illumination model was applied to the water similar to the terrain. For the Fatt we turned it up to 1.5 to make it hen for K factors we decided to leave ambient and diffuse at 1 and specular to 3. We also raised the specular power all the way to 350 since the water is expected to be very specular shiny. 
+
+
+<img src="Images/phongilluminationformula.png"  width="300" >
+
+
+However the normals would need to be calculated within the shader as the shader determined the shape of the wave. In order to do this we derived the noise formula into partial derivatives alongside the x and z axis. Using these derivatives we formed tangent vectors for each vertice then crossproduct them to find the normals while waving.
+
+``` 
+float dnoisedx = -_xSpread*_Strength*(cos((worldVertex.z-_xSpread*worldVertex.x)*_Spread+_Time*_Speed)*_Spread);
+float dnoisedz = _Strength*(cos((worldVertex.z-_xSpread*worldVertex.x)*_Spread+_Time*_Speed)*_Spread);
+float3 tx = float3(1, dnoisedx, 0);
+float3 tz = float3(0, dnoisedz, 1);
+o.worldNormal = normalize(cross(tz, tx));
+```
+
