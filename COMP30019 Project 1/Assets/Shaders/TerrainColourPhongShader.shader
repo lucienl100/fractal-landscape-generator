@@ -7,7 +7,7 @@ Shader "Unlit/TerrainColourPhongShader"
         _avgheight ("avgheight", Range(-400,400.0)) = 0
 		_maxheight ("maxheight", Range(-400,400.0)) = 0
 		_fAtt ("fAtt", Range(0,5)) = 1
-        _Ka ("Ambient relfection constant",Range(0,5)) = 1.5
+        _Ka ("Ambient reflection constant",Range(0,5)) = 1.5
         _Kd ("Diffuse reflection constant",Range(0,5)) = 1
         _Ks ("Specular reflection constant", Range(0,5)) = 0.1
         _specN ("SpecularN", Range(1,20)) = 1
