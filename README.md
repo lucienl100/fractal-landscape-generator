@@ -143,7 +143,7 @@ void MedianFilter()
         int adjustedWindowWidthX;
         int adjustedWindowWidthY;
 
-		HeightGrid copy = verts.Copy();
+	HeightGrid copy = verts.Copy();
 
         for (int x = 0; x < gridSize; x++)
         {
