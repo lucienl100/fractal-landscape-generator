@@ -111,6 +111,55 @@ Code:
  ```
 
 ## Camera Motion
+The camera motion implemented is a flying vehicle first person camera, the camera is allowed to go anywhere inside the bounds of the terrain and above the ground.
+The camera is attached to a player object which rotates according to the mouse x axis input, controllong the yaw of the camera. The camera itself rotates up and down independently of the player object, controlling the pitch of the camera.
+
+The code used for rotating the camera using the mouse implements the following update method:
+
+```c#
+void Update()
+    {
+        float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity;
+        float mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity;
+
+        xRotation -= mouseY;
+        xRotation = Mathf.Clamp(xRotation, -90f, 90f);
+        transform.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
+        playerBody.Rotate(Vector3.up * mouseX);
+
+    }
+```
+The xRotation is clamped between -90 degrees and 90 degrees to prevent the player from flipping the camera.
+The playerBody is rotated using the mouse x axis input, rotating the camera as well because the camera is a child object.
+
+The movement script of the camera checks for the inputs of the keys W, A, S, D to move the player transform forward, left, back and right. The script also checks for the input of Shift to increase flying speed. The camera is prevented from going outside the bounds and under the terrain using Physics.CheckSphere() around the player's intended location in the frame to check for ground while using a basic comparison function to check if the player will go outside the terrain bounds, if these checks do not return positive, then the transform is moved to its intended position in the frame.
+
+The code section used for restricting camera movement:
+
+```c#
+	float i = 0.001f;
+	while(Physics.CheckSphere((player.position + dPosition), 0.55f))
+	{
+		if (dPosition.normalized == new Vector3 (0, -1, 0))
+		{
+			dPosition *= 0;
+			break;
+		}
+		dPosition.y += i;
+	}
+	if ((player.position + dPosition).x > gridsize - 0.5f || (player.position + dPosition).x < 0.5f)
+	{
+		dPosition.x = 0;
+	}
+	if ((player.position + dPosition).z > gridsize - 0.5f || (player.position + dPosition).z < 0.5f)
+	{
+		dPosition.z = 0;
+	}
+	player.position += dPosition;
+```
+The while loop adjusts the intended player position above the terrain, this allows for 'sliding' movement over the terrain.
+
+dPosition is the vector used to move the player.
 
 You can use images/gif by adding them to a folder in your repo:
 
