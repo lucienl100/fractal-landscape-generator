@@ -3,8 +3,8 @@
 
 # Project-1 README
 
-Remember that _"this document"_ should be `well written` and formatted **appropriately**. It should be easily readable within Github. Modify this file... 
-this is just an example of different formating tools available for you. For help with the format you can find a guide [here](https://docs.github.com/en/github/writing-on-github).
+
+<img src="Images/showcaseimage.png">
 
 ## Table of contents
 * [Team Members](#team-members)
@@ -13,6 +13,7 @@ this is just an example of different formating tools available for you. For help
 * [Diamond-Square implementation](#diamond-square-implementation)
 * [Camera Motion](#camera-motion)
 * [Median Filter](#median-filter)
+* [Sun](#sun)
 * [Terrain Vertex Shader](#terrain-vertex-shader)
 * [Water Shader](#water-shader)
 
@@ -31,6 +32,7 @@ this is just an example of different formating tools available for you. For help
 
 ## General info
 This is project - 1 ...
+
 Project 1 is an implementation of the Diamond Square algorithm and custom HLSL shaders that demonstrates phong shading. This project is based on generating a fractal landscape using the DS algorithm. This implementation is made by, Lucien Lu, Nathan Rearick, Timmy Truong.
 	
 ## Technologies
@@ -123,7 +125,11 @@ void Update()
 The xRotation is clamped between -90 degrees and 90 degrees to prevent the player from flipping the camera.
 The playerBody is rotated using the mouse x axis input, which will rotate the camera as well because the camera is a child object.
 
+<img src="Images/cameralock.gif"  width="500" >
+
 The movement script of the camera checks for the inputs of the keys W, A, S, D to move the player transform forward, left, back and right. The script also checks for the input of Shift to increase flying speed. The camera is prevented from going outside the bounds and under the terrain using Physics.CheckSphere() around the player's intended location in the frame to check for ground while using a basic comparison function to check if the player will go outside the terrain bounds, if these checks do not return positive, then the transform is moved to its intended position in the frame.
+
+<img src="Images/cameramovement.gif"  width="500" >
 
 The code section used for restricting camera movement:
 
@@ -200,6 +206,38 @@ void MedianFilter()
             }
         }
     }
+```
+
+## Sun
+
+The sun is made of an invisible game object at the center of our world which connects to a sphere object held up above it. The invisible object is then rotated using a script which creates the effect of a sun rotating around our world. The lighting is implemented using a point light connected to the sphere sun object alongside custom Phong illumination shader implementations on the waves and terrain.
+
+<img src="Images/sunspinning.gif"  width="500" >
+
+Here is the update method in the script that determines the movement of the sun. We made it by default shorten the night duration and togglable in game.
+```c#
+// If C pressed stop sun
+if (Input.GetKeyDown(KeyCode.C))
+{
+	pauseSun = !pauseSun;
+}
+
+if (!pauseSun && lessNight) {
+	// Speed up sun if too low
+	if (sun.position.y > -80f)
+	{
+		actualSpinSpeed = spinSpeed;
+	}
+	else
+	{
+		actualSpinSpeed = spinSpeed*2;
+	}
+	this.transform.localRotation *= Quaternion.AngleAxis(Time.deltaTime * actualSpinSpeed, new Vector3(1.0f, 0.0f, 0.0f));
+	} else if (!pauseSun) {
+		actualSpinSpeed = spinSpeed;
+	this.transform.localRotation *= Quaternion.AngleAxis(Time.deltaTime * actualSpinSpeed, new Vector3(1.0f, 0.0f, 0.0f));
+	}
+}
 ```
 
 ## Terrain Vertex Shader
@@ -304,7 +342,7 @@ color.a = 1.0f;
 return color;
 ```
 
-<img src="Images/phongilluminationformula.png"  width="300" >
+<img src="Images/phongilluminationformula.png"  width="500" >
 
 In the formula we left the attenuation factor fatt to 1. For the constants (the three K) in the formula; we decided to turn ambient reflections a bit up to 1.5 while leaving diffuse to 1 so the shadows would not be too harsh and the specular constant down to 0.15 as we expected the terrain to not be very specular shiny/reflective to be realistic. The specular power was left at 1.
 
@@ -312,7 +350,7 @@ The normals were generated using Recalculatenormals() method within the Terrian 
 
 Inside the fragment shader is where the colours of the terrain is set. It is based on two height values, the average height (which should be 0) and the maximum height. From these two values, two weighted values are calculated which are the snowheight and sandheight. These last two floats are used to choose where the final colours/gradients are. Above snowheight is all white while under it is brown which transitions to green. At sealevel which is a bit above the average height, green is above however below it fades to yellow sand.
 
-<img src="Images/heights.png"  width="300" >
+<img src="Images/heights.png"  width="500" >
 
 ## Water Shader
 
@@ -328,7 +366,7 @@ worldVertex.y = worldVertex.y + noise;
 Then the Phong illumination model was applied to the water with the same implementation to the terrain. But for the Fatt we turned it up to 1.5 to make it hen for K factors we decided to leave ambient and diffuse at 1 and specular to 3. We also raised the specular power all the way to 350 since the water is expected to be very specular shiny. 
 
 
-<img src="Images/phongilluminationformula.png"  width="300" >
+<img src="Images/phongilluminationformula.png"  width="500" >
 
 
 The normals would need to be calculated within the shader as the shader determined the shape of the wave. In order to do this we derived the noise formula into partial derivatives alongside the x and z axis. Using these derivatives we formed tangent vectors for each vertice then crossproduct them to find the normals while waving.
@@ -340,4 +378,6 @@ float3 tx = float3(1, dnoisedx, 0);
 float3 tz = float3(0, dnoisedz, 1);
 o.worldNormal = normalize(cross(tz, tx));
 ```
+
+<img src="Images/wavesmoving.gif"  width="500" >
 
