@@ -124,10 +124,9 @@ To create a gif from a video you can follow this [link](https://ezgif.com/video-
 ## Median Filter
 
 We decided to add an optional Median Filter to the terrain generation. This will increase computation time and loading time by approximately 1 second but results in a much smoother surface.
+Left - No median filter, Right - Median filter
 <p align="left">
-	No median filter
   <img src="Images/nomedianfilter.gif"  width="300" >
-	Median filter
   <img src="Images/medianfilter.gif"  width="300" >
 </p>
 
