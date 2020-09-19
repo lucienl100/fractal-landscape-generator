@@ -14,11 +14,12 @@ this is just an example of different formating tools available for you. For help
 * [Diamond-Square implementation](#diamond-square-implementation)
 * [Camera Motion](#camera-motion)
 * [Median Filter](#median-filter)
-(https://i.imgur.com/RbG9XVP.png)
+
 ## Team Members
 <p align="center">
   <img src="Images/Q1-1.gif"  width="300" >
 </p>
+(https://i.imgur.com/RbG9XVP.png)
 | Name | Task | State |
 | :---         |     :---:      |          ---: |
 | Nathan Rearick  | Diamond Square     |  ![100%](https://progress-bar.dev/100) |
