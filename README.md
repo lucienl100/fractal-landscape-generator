@@ -13,8 +13,8 @@ this is just an example of different formating tools available for you. For help
 * [Diamond-Square implementation](#diamond-square-implementation)
 * [Camera Motion](#camera-motion)
 * [Median Filter](#median-filter)
-* [Terrain Vertex Shader](#Terrain Vertex Shader)
-* [Water Shader](#Water Shader)
+* [Terrain Vertex Shader](#terrain-vertex-shader)
+* [Water Shader](#water-shader)
 
 ## Team Members
 
@@ -206,6 +206,104 @@ void MedianFilter()
 
 For the the illumination shader for the terrian, [Phong illumination model](https://en.wikipedia.org/wiki/Phong_reflection_model) was implemented in a custom Cg/HLSL shader. 
 
+The vertex shader in the custom shader simply passes through vertexes and world normals to the fragment shader in screenspace.
+
+```
+vertOut o;
+
+// Pass through world vertex and normals
+float4 worldVertex = mul(unity_ObjectToWorld, v.vertex);
+float3 worldNormal = normalize(mul(transpose((float3x3)unity_WorldToObject), v.normal.xyz));
+o.worldNormal = worldNormal;
+o.worldVertex = worldVertex;
+
+// Pass through colours and vertex in screenspace
+o.color = v.color;
+o.vertex = mul(UNITY_MATRIX_MVP, v.vertex);
+return o;
+```
+The fragment shader determines the colour of the mountain based on the height of the vertex in the world then calculates the phong illumination from given normals and the point light. We decided to calculate the colours inside the fragment shader as it produced smoother gradients since it was done per pixel instead of per vertex and interpolated.
+```
+float actualMaxHeight = _maxheight - _avgheight;
+
+// Adjust weights of sealevels and snow
+float SNOWWEIGHT = 0.5;
+float SNOWTOBROWNBLUR = 4; // higher = more blurry snow edge
+float HEIGHTABOVESEALEVEL = 5.5; // this value increases sealevel by addition
+float NOISEWEIGHT = 0.1; // higher = more colour noise
+float NOISESIZE = 20; // higher = noise waves bigger
+float SNOWWAVEFACTOR = 1000; // higher = bigger sin wave
+float BROWNFACTOR = 0.8; //higher = more brown area
+// Variables that adjust when darkness comes based on height of sun. 
+float DISTANCEBELOWZERO = 80; // how low under 0 to be dark mode
+float AMBLEVELWHENUNDER = 0.5; // amount of amb light
+
+// Colors
+float3 green = float3(0.4f, 0.55f, 0.3f);
+float3 brown = float3(0.6f, 0.45f, 0.3f);
+float3 white = float3(0.95f, 0.95f, 0.95f);
+float3 sand = float3(0.8f, 0.8f, 0.5f);
+float3 brown2whitediff = white - brown;
+float3 white2browndiff = brown - white;
+float3 brown2greendiff = green - brown;
+float3 green2sanddiff = sand - green;
+
+float snowheight = actualMaxHeight-SNOWWEIGHT*(actualMaxHeight);
+float sandheight = HEIGHTABOVESEALEVEL;
+float factor;
+
+if (v.worldVertex.y > sin(v.worldVertex.x*v.worldVertex.z/SNOWWAVEFACTOR)+snowheight) {
+	// White down to snow height
+	factor = clamp(2/(v.worldVertex.y-(sin(v.worldVertex.x*v.worldVertex.z/SNOWWAVEFACTOR)+snowheight)), 0, 1);
+	v.color.rgb = white + factor*white2browndiff;
+} else if (v.worldVertex.y  > (sandheight)) {
+	// Gradient brown to green until reached avg + 5
+	factor = clamp(((snowheight - v.worldVertex.y))/(BROWNFACTOR*(snowheight-sandheight)), 0, 1);
+	v.color.rgb = brown + factor*(brown2greendiff);
+} else {
+	// Green to sand
+	factor = clamp(((sandheight - v.worldVertex.y))/SNOWTOBROWNBLUR, 0, 1);
+	v.color.rgb = green + factor*green2sanddiff;
+} 
+
+// Add subtle noise to entire area above sea level.
+if (v.worldVertex.y  > (sandheight)) {	
+	factor = clamp(((snowheight - v.worldVertex.y))/(snowheight-sandheight), 0, 1);
+	float noise = clamp(cos(sin((v.worldVertex.x - v.worldVertex.z)/NOISESIZE) - (v.worldVertex.x + v.worldVertex.z)/NOISESIZE), 0, 1);
+	v.color.rgb += NOISEWEIGHT*(1-factor)*(noise)*brown2whitediff;
+}
+
+float3 interpolatedNormal = normalize(v.worldNormal);
+
+// Calculate ambient RGB intensities
+float3 amb = v.color.rgb * UNITY_LIGHTMODEL_AMBIENT.rgb * _Ka;
+
+// Calculate diffuse RBG reflections, we save the results of L.N because we will use it again for specular
+float3 L = normalize(_PointLightPosition - v.worldVertex.xyz);
+float LdotN = dot(L, interpolatedNormal);
+float3 dif = _fAtt * _PointLightColor.rgb * _Kd * v.color.rgb * saturate(LdotN);
+
+float3 V = normalize(_WorldSpaceCameraPos - v.worldVertex.xyz);
+float3 H = normalize(V + L);
+
+// Calculate specular
+float3 spe = _fAtt * _PointLightColor.rgb * _Ks * pow(saturate(dot(interpolatedNormal, H)), _specN);
+
+// Combine Phong illumination model components
+float4 color;
+if (_PointLightPosition.y > 0) {
+	// If sun above y = 0
+	color.rgb = amb.rgb + dif.rgb + spe.rgb;
+} else {
+	// If sun below y = 0
+	factor = clamp(((_PointLightPosition.y+DISTANCEBELOWZERO)/DISTANCEBELOWZERO), 0, 1);
+	color.rgb = clamp((factor),AMBLEVELWHENUNDER,1) * (amb.rgb) + factor*(dif.rgb + spe.rgb);
+}
+
+color.a = 1.0f;
+return color;
+```
+
 <img src="Images/phongilluminationformula.png"  width="300" >
 
 In the formula we left the attenuation factor fatt to 1. For the constants (the three K) in the formula; we decided to turn ambient reflections a bit up to 1.5 while leaving diffuse to 1 so the shadows would not be too harsh and the specular constant down to 0.15 as we expected the terrain to not be very specular shiny/reflective to be realistic. The specular power was left at 1.
@@ -218,22 +316,22 @@ Inside the fragment shader is where the colours of the terrain is set. It is bas
 
 ## Water Shader
 
-The water's movement was calculated within the water's vertex shader which displaces the height of the wave based on time and position using sin & cos waves.
+The water's movement was calculated within the water's vertex shader which displaces the height of the wave based on time and position using sin & cos waves. 
 
-The mathematical formula used for the height displacement/noise is:
+The mathematical formula used for the height displacement/noise inside the vertex shader was:
 
 ```
 float noise = _Strength*(sin((worldVertex.z-_xSpread*worldVertex.x)*_Spread+_Time*_Speed)) + _Strength2*cos(_timeSpreadHeight*_Time*_Speed);
 worldVertex.y = worldVertex.y + noise;
 ```
 
-Then the Phong illumination model was applied to the water similar to the terrain. For the Fatt we turned it up to 1.5 to make it hen for K factors we decided to leave ambient and diffuse at 1 and specular to 3. We also raised the specular power all the way to 350 since the water is expected to be very specular shiny. 
+Then the Phong illumination model was applied to the water with the same implementation to the terrain. But for the Fatt we turned it up to 1.5 to make it hen for K factors we decided to leave ambient and diffuse at 1 and specular to 3. We also raised the specular power all the way to 350 since the water is expected to be very specular shiny. 
 
 
 <img src="Images/phongilluminationformula.png"  width="300" >
 
 
-However the normals would need to be calculated within the shader as the shader determined the shape of the wave. In order to do this we derived the noise formula into partial derivatives alongside the x and z axis. Using these derivatives we formed tangent vectors for each vertice then crossproduct them to find the normals while waving.
+The normals would need to be calculated within the shader as the shader determined the shape of the wave. In order to do this we derived the noise formula into partial derivatives alongside the x and z axis. Using these derivatives we formed tangent vectors for each vertice then crossproduct them to find the normals while waving.
 
 ``` 
 float dnoisedx = -_xSpread*_Strength*(cos((worldVertex.z-_xSpread*worldVertex.x)*_Spread+_Time*_Speed)*_Spread);
