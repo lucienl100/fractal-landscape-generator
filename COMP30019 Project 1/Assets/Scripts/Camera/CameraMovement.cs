@@ -62,7 +62,6 @@ public class CameraMovement : MonoBehaviour
 				break;
 			}
 			dPosition.y += i;
-			Mathf.Max(0.00001f, i/2f);
 		}
 		if ((player.position + dPosition).x > gridsize - 0.5f || (player.position + dPosition).x < 0.5f)
 		{

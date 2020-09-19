@@ -2,7 +2,7 @@
 {
     Properties
     {
-        _Color("Color", Color) = (0.30, 0.550, 0.8, 0.7)
+        _Color("Color", Color) = (0.3, 0.45, 0.5, 0.7)
         _Strength("Strength", Range(0,5)) = 1.1
         _Strength2("Strength2", Range(0,5)) = 1
         _xSpread("xSpread", Range(0,2)) = 0.25
@@ -11,9 +11,9 @@
         _Spread("Spread", Range(0, 1)) = 0.1
         _fAtt ("fAtt", Range(0,5)) = 1
         _Ka ("Ambient relfection constant",Range(0,5)) = 1
-        _Kd ("Diffuse reflection constant",Range(0,5)) = 1
-        _Ks ("Ks", Range(0,10)) = 4
-        _specN ("SpecularN", Range(1,500)) = 500
+        _Kd ("Diffuse reflection constant",Range(0,5)) = 1.4
+        _Ks ("Ks", Range(0,10)) = 3
+        _specN ("SpecularN", Range(1,500)) = 350
         _PointLightColor ("Point Light Color", Color) = (1, 1, 1)
         _PointLightPosition ("Point Light Position", Vector) = (0.0, 100.0, 0.0)
     }
