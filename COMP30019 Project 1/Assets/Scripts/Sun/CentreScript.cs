@@ -4,10 +4,13 @@ using UnityEngine;
 
 public class CentreScript : MonoBehaviour
 {
-    public float spinSpeed = 40f;
+    public float spinSpeed;
     private float halfgrid;
     public GameObject terrainGenerator;
     public Transform sun;
+    public bool pauseSun;
+    public bool lessNight;
+    private float actualSpinSpeed;
     // Start is called before the first frame update
     void Start()
     {
@@ -18,14 +21,26 @@ public class CentreScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (sun.position.y < -40f)
+        // If C pressed stop sun
+        if (Input.GetKeyDown(KeyCode.C))
         {
-            spinSpeed = 30f;
+            pauseSun = !pauseSun;
         }
-        else
-        {
-            spinSpeed = 15f;
+
+        if (!pauseSun && lessNight) {
+            // Speed up sun if too low
+            if (sun.position.y > -80f)
+            {
+                actualSpinSpeed = spinSpeed;
+            }
+            else
+            {
+                actualSpinSpeed = spinSpeed*2;
+            }
+            this.transform.localRotation *= Quaternion.AngleAxis(Time.deltaTime * actualSpinSpeed, new Vector3(1.0f, 0.0f, 0.0f));
+        } else if (!pauseSun) {
+            actualSpinSpeed = spinSpeed;
+            this.transform.localRotation *= Quaternion.AngleAxis(Time.deltaTime * actualSpinSpeed, new Vector3(1.0f, 0.0f, 0.0f));
         }
-        this.transform.localRotation *= Quaternion.AngleAxis(Time.deltaTime * spinSpeed, new Vector3(1.0f, 0.0f, 0.0f));
     }
 }

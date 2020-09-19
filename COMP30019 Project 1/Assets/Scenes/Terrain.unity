@@ -794,6 +794,8 @@ MonoBehaviour:
   spinSpeed: 20
   terrainGenerator: {fileID: 1511379382}
   sun: {fileID: 136067312}
+  pauseSun: 0
+  lessNight: 1
 --- !u!4 &1626612468
 Transform:
   m_ObjectHideFlags: 0
@@ -891,6 +893,8 @@ MonoBehaviour:
 
     E to toggle Median
     Filter (initially off)
+
+    C to toggle Sun Moving
 
     Q to toggle this guide'
 --- !u!222 &1761457870
