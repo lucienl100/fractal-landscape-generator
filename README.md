@@ -112,7 +112,7 @@ Code:
 
 ## Camera Motion
 The camera motion implemented is a flying vehicle first person camera, the camera is allowed to go anywhere inside the bounds of the terrain and above the ground.
-The camera is attached to a player object which rotates according to the mouse x axis input, controllong the yaw of the camera. The camera itself rotates up and down independently of the player object, controlling the pitch of the camera.
+The camera is attached to a player object which rotates accordingly to the mouse x axis input, controllong the yaw of the camera. The camera itself rotates up and down independently of the player object, controlling the pitch of the camera.
 
 The code used for rotating the camera using the mouse implements the following update method:
 
@@ -130,7 +130,7 @@ void Update()
     }
 ```
 The xRotation is clamped between -90 degrees and 90 degrees to prevent the player from flipping the camera.
-The playerBody is rotated using the mouse x axis input, rotating the camera as well because the camera is a child object.
+The playerBody is rotated using the mouse x axis input, which will rotate the camera as well because the camera is a child object.
 
 The movement script of the camera checks for the inputs of the keys W, A, S, D to move the player transform forward, left, back and right. The script also checks for the input of Shift to increase flying speed. The camera is prevented from going outside the bounds and under the terrain using Physics.CheckSphere() around the player's intended location in the frame to check for ground while using a basic comparison function to check if the player will go outside the terrain bounds, if these checks do not return positive, then the transform is moved to its intended position in the frame.
 
@@ -157,7 +157,7 @@ The code section used for restricting camera movement:
 	}
 	player.position += dPosition;
 ```
-The while loop adjusts the intended player position above the terrain, this allows for 'sliding' movement over the terrain.
+The while loop adjusts the intended player position above the terrain in the situation it gets too close, this allows for 'sliding' movement over the terrain.
 
 dPosition is the vector used to move the player.
 
