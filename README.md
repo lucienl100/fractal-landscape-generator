@@ -34,6 +34,8 @@
 This is project - 1 ...
 
 Project 1 is an implementation of the Diamond Square algorithm and custom HLSL shaders that demonstrates phong shading. This project is based on generating a fractal landscape using the DS algorithm. This implementation is made by, Lucien Lu, Nathan Rearick, Timmy Truong.
+
+The main project scene can be found under /Assets/ScenesTerrain.unity
 	
 ## Technologies
 Project is created with:
