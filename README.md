@@ -125,10 +125,10 @@ You can use emojis :+1: but do not over use it, we are looking for professional 
 
 We decided to add an optional Median Filter to the terrain generation. This will increase computation time and loading time by approximately 1 second but results in a much smoother surface.
 <p align="left">
-  <img src="Gifs/nomedianfilter"  width="300" >
+  <img src="nomedianfilter.gif"  width="300" >
 </p>
 <p align="right">
-  <img src="Gifs/medianfilter"  width="300" >
+  <img src="medianfilter.gif"  width="300" >
 </p>
 
 ```c#
