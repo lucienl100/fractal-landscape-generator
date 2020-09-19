@@ -9,7 +9,7 @@ Shader "Unlit/TerrainColourPhongShader"
 		_fAtt ("fAtt", Range(0,5)) = 1
         _Ka ("Ambient relfection constant",Range(0,5)) = 1.5
         _Kd ("Diffuse reflection constant",Range(0,5)) = 1
-        _Ks ("Ks", Range(0,5)) = 0.1
+        _Ks ("Specular reflection constant", Range(0,5)) = 0.1
         _specN ("SpecularN", Range(1,20)) = 1
         _PointLightColor ("Point Light Color", Color) = (1, 1, 1)
         _PointLightPosition ("Point Light Position", Vector) = (0.0, 0.0, 0.0)
