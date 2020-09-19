@@ -5,6 +5,8 @@
         _Color("Color", Color) = (0.30, 0.550, 0.8, 0.7)
         _Strength("Strength", Range(0,5)) = 1.1
         _Strength2("Strength2", Range(0,5)) = 1
+        _xSpread("xSpread", Range(0,2)) = 0.25
+        _timeSpreadHeight("_timeSpreadHeight", Range(0,1)) = 0.4
         _Speed("Speed", Range(-100, 100)) = 15
         _Spread("Spread", Range(0, 1)) = 0.1
         _fAtt ("fAtt", Range(0,5)) = 1
@@ -33,6 +35,8 @@
             float4 _Color;
             float _Strength;
             float _Strength2;
+            float _xSpread;
+            float _timeSpreadHeight;
             float _Speed;
             float _Spread;
             float _fAtt;
@@ -70,11 +74,11 @@
                 // float dfdz = s*sin(sin(_Spread*(worldVertex.x+worldVertex.z))/2-(_Spread*(worldVertex.x+worldVertex.z))+(_Speed*_Time));
 
                 // Calculate water waves/noise and tangents
-                float noise = _Strength*(sin((worldVertex.z-0.25*worldVertex.x)*_Spread+_Time*_Speed)) + _Strength2*cos(0.4*_Time*_Speed);
+                float noise = _Strength*(sin((worldVertex.z-_xSpread*worldVertex.x)*_Spread+_Time*_Speed)) + _Strength2*cos(_timeSpreadHeight*_Time*_Speed);
                 worldVertex.y = worldVertex.y + noise;
                 //Calculate the partial derivatives dx and dz of noise
-                float dnoisedx = -0.25*_Strength*(cos((worldVertex.z-0.25*worldVertex.x)*_Spread+_Time*_Speed)*_Spread);
-                float dnoisedz = _Strength*(cos((worldVertex.z-0.25*worldVertex.x)*_Spread+_Time*_Speed)*_Spread);
+                float dnoisedx = -_xSpread*_Strength*(cos((worldVertex.z-_xSpread*worldVertex.x)*_Spread+_Time*_Speed)*_Spread);
+                float dnoisedz = _Strength*(cos((worldVertex.z-_xSpread*worldVertex.x)*_Spread+_Time*_Speed)*_Spread);
                 //Get the tangent vectors
                 float3 tx = float3(1, dnoisedx, 0);
                 float3 tz = float3(0, dnoisedz, 1);
