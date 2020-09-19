@@ -46,7 +46,7 @@ Project 1 is an implementation of the Diamond Square algorithm and custom HLSL s
 ## Technologies
 Project is created with:
 * Unity 2019.4.3f1
-
+* Nvidia ShadowPlay
 ## Diamond-Square implementation
 For the Diamond Square algorithm, the corners of the grid is set to a random value in a specified range. Then the centre of these 4 points is set to the average of the heights of the corners, this is known as the diamond step. Then for each 'diamond', the center of the vertices is set to the average of the diamond's points (Note: For points on the edge, only 3 points are used), this is the square step. After both of these steps are completed, the grid is then split into 4 equally sized grids, and the algorithm repeats for each grid. This processes continues until the size of each grid has a side length of 1, which results in every point in the original grid to be designated a specific height.
 
