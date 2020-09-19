@@ -244,7 +244,13 @@ if (!pauseSun && lessNight) {
 
 For the the illumination shader for the terrian, [Phong illumination model](https://en.wikipedia.org/wiki/Phong_reflection_model) was implemented in a custom Cg/HLSL shader. 
 
-The vertex shader in the custom shader simply passes through vertexes and world normals to the fragment shader in screenspace.
+<img src="Images/phongilluminationformula.png"  width="500" >
+
+In the formula we left the attenuation factor fatt to 1. For the constants (the three K) in the formula; we decided to turn ambient reflections a bit up to 1.5 while leaving diffuse to 1 so the shadows would not be too harsh and the specular constant down to 0.15 as we expected the terrain to not be very specular shiny/reflective to be realistic. The specular power was left at 1.
+
+The normals were generated using Recalculatenormals() method within the Terrian script and sent to the shader alongside the position and colour of the point light.
+
+The vertex shader in the custom shader simply passes through vertexes and world normals to the fragment shader in screenspace:
 
 ```
 vertOut o;
@@ -260,7 +266,12 @@ o.color = v.color;
 o.vertex = mul(UNITY_MATRIX_MVP, v.vertex);
 return o;
 ```
-The fragment shader determines the colour of the mountain based on the height of the vertex in the world then calculates the phong illumination from given normals and the point light. We decided to calculate the colours inside the fragment shader as it produced smoother gradients since it was done per pixel instead of per vertex and interpolated.
+Inside the fragment shader is where the colours of the terrain is set. It is based on two height values, the average height (which should be 0) and the maximum height. From these two values, two weighted values are calculated which are the snowheight and sandheight. These last two floats are used to choose where the final colours/gradients are. Above snowheight is all white while under it is brown which transitions to green. At sealevel which is a bit above the average height, green is above however below it fades to yellow sand.
+
+<img src="Images/heights.png"  width="500" >
+
+We decided to calculate the colours inside the fragment shader as it produced smoother gradients since it was done per pixel instead of per vertex and interpolated. Here is the fragment shader doing the terrain colours and using Phong Illumination.
+
 ```
 float actualMaxHeight = _maxheight - _avgheight;
 
@@ -341,16 +352,6 @@ if (_PointLightPosition.y > 0) {
 color.a = 1.0f;
 return color;
 ```
-
-<img src="Images/phongilluminationformula.png"  width="500" >
-
-In the formula we left the attenuation factor fatt to 1. For the constants (the three K) in the formula; we decided to turn ambient reflections a bit up to 1.5 while leaving diffuse to 1 so the shadows would not be too harsh and the specular constant down to 0.15 as we expected the terrain to not be very specular shiny/reflective to be realistic. The specular power was left at 1.
-
-The normals were generated using Recalculatenormals() method within the Terrian script and sent to the shader alongside the position and colour of the point light.
-
-Inside the fragment shader is where the colours of the terrain is set. It is based on two height values, the average height (which should be 0) and the maximum height. From these two values, two weighted values are calculated which are the snowheight and sandheight. These last two floats are used to choose where the final colours/gradients are. Above snowheight is all white while under it is brown which transitions to green. At sealevel which is a bit above the average height, green is above however below it fades to yellow sand.
-
-<img src="Images/heights.png"  width="500" >
 
 ## Water Shader
 
