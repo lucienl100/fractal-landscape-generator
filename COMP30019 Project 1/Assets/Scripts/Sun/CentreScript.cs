@@ -24,7 +24,7 @@ public class CentreScript : MonoBehaviour
         }
         else
         {
-            spinSpeed = 20f;
+            spinSpeed = 15f;
         }
         this.transform.localRotation *= Quaternion.AngleAxis(Time.deltaTime * spinSpeed, new Vector3(1.0f, 0.0f, 0.0f));
     }
