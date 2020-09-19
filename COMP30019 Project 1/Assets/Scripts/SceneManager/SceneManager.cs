@@ -23,7 +23,7 @@ public class SceneManager : MonoBehaviour
 
     public Text text;
     private bool isLoading = true;
-    private Vector3 playerStartingPos = new Vector3(10f, 120f, 10f);
+    private Vector3 playerStartingPos = new Vector3(10f, 140f, 10f);
     private Vector3 playerStartingRot = new Vector3(0f, 45f, 0f);
     private Vector3 cameraStartingRot = new Vector3(45f, 0f, 0f);
     void Start()

@@ -2,16 +2,16 @@
 {
     Properties
     {
-        _Color("Color", Color) = (0.30, 0.850, 0.95, 0.7)
-        _Strength("Strength", Range(0,5)) = 0.7
-        _Strength2("Strength2", Range(0,5)) = 1.8
+        _Color("Color", Color) = (0.30, 0.550, 0.8, 0.7)
+        _Strength("Strength", Range(0,5)) = 1.1
+        _Strength2("Strength2", Range(0,5)) = 1
         _Speed("Speed", Range(-100, 100)) = 15
         _Spread("Spread", Range(0, 1)) = 0.1
         _fAtt ("fAtt", Range(0,5)) = 1
         _Ka ("Ambient relfection constant",Range(0,5)) = 1
         _Kd ("Diffuse reflection constant",Range(0,5)) = 1
-        _Ks ("Ks", Range(0,10)) = 2.5
-        _specN ("SpecularN", Range(1,500)) = 250
+        _Ks ("Ks", Range(0,10)) = 4
+        _specN ("SpecularN", Range(1,500)) = 500
         _PointLightColor ("Point Light Color", Color) = (1, 1, 1)
         _PointLightPosition ("Point Light Position", Vector) = (0.0, 100.0, 0.0)
     }
@@ -70,11 +70,11 @@
                 // float dfdz = s*sin(sin(_Spread*(worldVertex.x+worldVertex.z))/2-(_Spread*(worldVertex.x+worldVertex.z))+(_Speed*_Time));
 
                 // Calculate water waves/noise and tangents
-                float noise = _Strength*(sin((worldVertex.x+worldVertex.z)*_Spread+_Time*_Speed) + _Strength2*cos(0.25*((worldVertex.z-worldVertex.x)*(_Spread)+_Time*_Speed)));
-                worldVertex.y = worldVertex.y + noise * _Strength;
+                float noise = _Strength*(sin((worldVertex.z-0.25*worldVertex.x)*_Spread+_Time*_Speed)) + _Strength2*cos(0.4*_Time*_Speed);
+                worldVertex.y = worldVertex.y + noise;
                 //Calculate the partial derivatives dx and dz of noise
-                float dnoisedx = _Strength*(cos((worldVertex.x+worldVertex.z)*_Spread+_Time*_Speed)*_Spread) + (_Spread)*0.25*_Strength2*sin(0.25*((worldVertex.z-worldVertex.x)*(_Spread)+_Time*_Speed));
-                float dnoisedz = _Strength*(cos((worldVertex.x+worldVertex.z)*_Spread+_Time*_Speed)*_Spread) - (_Spread)*0.25*_Strength2*sin(0.25*((worldVertex.z-worldVertex.x)*(_Spread)+_Time*_Speed));
+                float dnoisedx = -0.25*_Strength*(cos((worldVertex.z-0.25*worldVertex.x)*_Spread+_Time*_Speed)*_Spread);
+                float dnoisedz = _Strength*(cos((worldVertex.z-0.25*worldVertex.x)*_Spread+_Time*_Speed)*_Spread);
                 //Get the tangent vectors
                 float3 tx = float3(1, dnoisedx, 0);
                 float3 tz = float3(0, dnoisedz, 1);
