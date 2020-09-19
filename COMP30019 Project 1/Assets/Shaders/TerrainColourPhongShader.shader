@@ -9,7 +9,7 @@ Shader "Unlit/TerrainColourPhongShader"
 		_fAtt ("fAtt", Range(0,5)) = 1
         _Ka ("Ambient reflection constant",Range(0,5)) = 1.5
         _Kd ("Diffuse reflection constant",Range(0,5)) = 1
-        _Ks ("Specular reflection constant", Range(0,5)) = 0.1
+        _Ks ("Specular reflection constant", Range(0,5)) = 0.15
         _specN ("SpecularN", Range(1,20)) = 1
         _PointLightColor ("Point Light Color", Color) = (1, 1, 1)
         _PointLightPosition ("Point Light Position", Vector) = (0.0, 0.0, 0.0)
@@ -81,16 +81,16 @@ Shader "Unlit/TerrainColourPhongShader"
 				float NOISEWEIGHT = 0.1; // higher = more colour noise
 				float NOISESIZE = 20; // higher = noise waves bigger
 				float SNOWWAVEFACTOR = 1000; // higher = bigger sin wave
-
+				float BROWNFACTOR = 0.8; //higher = more brown area
 				// Variables that adjust when darkness comes based on height of sun. 
 				float DISTANCEBELOWZERO = 80; // how low under 0 to be dark mode
 				float AMBLEVELWHENUNDER = 0.5; // amount of amb light
 
 				// Colors
-				float3 green = float3(0.3f, 0.6f, 0.1f);
-				float3 brown = float3(0.7f, 0.5f, 0.3f);
-				float3 white = float3(1.0f, 1.0f, 1.0f);
-				float3 sand = float3(0.8f, 0.8f, 0.4f);
+				float3 green = float3(0.4f, 0.55f, 0.3f);
+				float3 brown = float3(0.6f, 0.45f, 0.3f);
+				float3 white = float3(0.95f, 0.95f, 0.95f);
+				float3 sand = float3(0.8f, 0.8f, 0.5f);
 				float3 brown2whitediff = white - brown;
 				float3 white2browndiff = brown - white;
 				float3 brown2greendiff = green - brown;
@@ -106,7 +106,7 @@ Shader "Unlit/TerrainColourPhongShader"
 					v.color.rgb = white + factor*white2browndiff;
 				} else if (v.worldVertex.y  > (sandheight)) {
 					// Gradient brown to green until reached avg + 5
-					factor = clamp(((snowheight - v.worldVertex.y))/(snowheight-sandheight), 0, 1);
+					factor = clamp(((snowheight - v.worldVertex.y))/(BROWNFACTOR*(snowheight-sandheight)), 0, 1);
 					v.color.rgb = brown + factor*(brown2greendiff);
 				} else {
 					// Green to sand
