@@ -214,7 +214,7 @@ The sun is made of an invisible game object at the center of our world which con
 
 <img src="Images/sunspinning.gif"  width="500" >
 
-Here is the update method in the script that determines the movement of the sun. We made it by default shorten the night duration and togglable in game.
+Here is the update method in the script that determines the movement of the sun. We made it by default shorten the night duration and the movement toggleable during play.
 ```c#
 // If C pressed stop sun
 if (Input.GetKeyDown(KeyCode.C))
@@ -248,7 +248,7 @@ For the the illumination shader for the terrian, [Phong illumination model](http
 
 In the formula we left the attenuation factor fatt to 1. For the constants (the three K) in the formula; we decided to turn ambient reflections a bit up to 1.5 while leaving diffuse to 1 so the shadows would not be too harsh and the specular constant down to 0.15 as we expected the terrain to not be very specular shiny/reflective to be realistic. The specular power was left at 1.
 
-The normals were generated using Recalculatenormals() method within the Terrian script and sent to the shader alongside the position and colour of the point light.
+The normals were generated using Recalculatenormals() method within the terrain script and sent to the shader alongside the position and colour of the point light.
 
 The vertex shader in the custom shader simply passes through vertexes and world normals to the fragment shader in screenspace:
 
@@ -266,11 +266,11 @@ o.color = v.color;
 o.vertex = mul(UNITY_MATRIX_MVP, v.vertex);
 return o;
 ```
-Inside the fragment shader is where the colours of the terrain is set. It is based on two height values, the average height (which should be 0) and the maximum height. From these two values, two weighted values are calculated which are the snowheight and sandheight. These last two floats are used to choose where the final colours/gradients are. Above snowheight is all white while under it is brown which transitions to green. At sealevel which is a bit above the average height, green is above however below it fades to yellow sand.
+Inside the fragment shader is where the colours of the terrain is set. It is based on two height values, the average height (which should be 0) and the maximum height. From these two values, two weighted values are calculated which are the snowheight and sandheight. These last two floats are used to choose where the final colours/gradients are. Above snowheight is all white while under it is brown which transitions to green. A sin wave is used to make the snowheight line not flat. At sealevel which is a bit above the average height, it is all green above and below it; fades to yellow sand.
 
 <img src="Images/heights.png"  width="500" >
 
-We decided to calculate the colours inside the fragment shader as it produced smoother gradients since it was done per pixel instead of per vertex and interpolated. Here is the fragment shader doing the terrain colours and using Phong Illumination.
+We decided to calculate the colours inside the fragment shader as it produced smoother gradients since it was done per pixel instead of per vertex and interpolated. Here is the fragment shader doing the terrain colours and the Phong Illumination.
 
 ```
 float actualMaxHeight = _maxheight - _avgheight;
@@ -364,7 +364,7 @@ float noise = _Strength*(sin((worldVertex.z-_xSpread*worldVertex.x)*_Spread+_Tim
 worldVertex.y = worldVertex.y + noise;
 ```
 
-Then the Phong illumination model was applied to the water with the same implementation to the terrain. But for the Fatt we turned it up to 1.5 to make it hen for K factors we decided to leave ambient and diffuse at 1 and specular to 3. We also raised the specular power all the way to 350 since the water is expected to be very specular shiny. 
+Then the Phong illumination model was applied to the water with the same implementation to the terrain. But for the Fatt we turned it up to 1.5 which increased the diffuse and specular making the water seem to reflect more light. Then for K factors we decided to leave ambient and diffuse at 1 but increase specular to 3. We also raised the specular power all the way to 350 since the water is expected to be very specular shiny. 
 
 
 <img src="Images/phongilluminationformula.png"  width="500" >
