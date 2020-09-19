@@ -97,26 +97,26 @@ Shader "Unlit/TerrainColourPhongShader"
 				float3 green2sanddiff = sand - green;
 
 				float snowheight = actualMaxHeight-SNOWWEIGHT*(actualMaxHeight);
-				float sealevel = HEIGHTABOVESEALEVEL;
+				float sandheight = HEIGHTABOVESEALEVEL;
 				float factor;
 
                 if (v.worldVertex.y > sin(v.worldVertex.x*v.worldVertex.z/SNOWWAVEFACTOR)+snowheight) {
 					// White down to snow height
 					factor = clamp(2/(v.worldVertex.y-(sin(v.worldVertex.x*v.worldVertex.z/SNOWWAVEFACTOR)+snowheight)), 0, 1);
 					v.color.rgb = white + factor*white2browndiff;
-				} else if (v.worldVertex.y  > (sealevel)) {
+				} else if (v.worldVertex.y  > (sandheight)) {
 					// Gradient brown to green until reached avg + 5
-					factor = clamp(((snowheight - v.worldVertex.y))/(snowheight-sealevel), 0, 1);
+					factor = clamp(((snowheight - v.worldVertex.y))/(snowheight-sandheight), 0, 1);
 					v.color.rgb = brown + factor*(brown2greendiff);
 				} else {
 					// Green to sand
-					factor = clamp(((sealevel - v.worldVertex.y))/SNOWTOBROWNBLUR, 0, 1);
+					factor = clamp(((sandheight - v.worldVertex.y))/SNOWTOBROWNBLUR, 0, 1);
 					v.color.rgb = green + factor*green2sanddiff;
 				} 
 
 				// Add subtle noise to entire area above sea level.
-				if (v.worldVertex.y  > (sealevel)) {	
-					factor = clamp(((snowheight - v.worldVertex.y))/(snowheight-sealevel), 0, 1);
+				if (v.worldVertex.y  > (sandheight)) {	
+					factor = clamp(((snowheight - v.worldVertex.y))/(snowheight-sandheight), 0, 1);
 					float noise = clamp(cos(sin((v.worldVertex.x - v.worldVertex.z)/NOISESIZE) - (v.worldVertex.x + v.worldVertex.z)/NOISESIZE), 0, 1);
 					v.color.rgb += NOISEWEIGHT*(1-factor)*(noise)*brown2whitediff;
 				}
