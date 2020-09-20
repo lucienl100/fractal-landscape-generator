@@ -702,7 +702,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b4ad5fee1b9e9284fa19a18b18b03ec3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  baseMaxHeight: 90
+  baseMaxHeight: 95
   nVal: 8
   mapScalar: 257
   heightDecrement: 0.52
