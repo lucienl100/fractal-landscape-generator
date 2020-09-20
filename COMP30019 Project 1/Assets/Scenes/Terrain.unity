@@ -705,7 +705,7 @@ MonoBehaviour:
   baseMaxHeight: 95
   nVal: 8
   mapScalar: 257
-  heightDecrement: 0.52
+  heightDecrement: 0.5
   AvgHeight: 0
   randomTHeight: 0
   meshCollider: {fileID: 0}
