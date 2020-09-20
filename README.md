@@ -65,6 +65,66 @@ This section of code shows the use of a double nested for loop which will inspec
             LowerHeight();
 		}
 ```
+How each 'step' is performed:
+```
+void Step(Vector2 p1, Vector2 p3)
+	{
+        //  Performs diamond step and square step given an initial square
+
+        /* 
+         * Diamond step
+         *
+         * p4- - - p3
+         * - \ - / -
+         * - -mp - -
+         * - / - \ -
+         * p1- - - p2
+         * 
+         */
+
+        /*
+         * We can calculate the midpoint of the square by only using p1 and p3
+         * Then, calculate the height of the midpoint by getting the averages of the four corners, and adding a random value
+         */
+
+        Vector2 mp = (p1 + p3) / 2;
+        verts.SetHeight(mp, AverageHeight(mp, p1) + RandomHeight());
+
+        /*  Square step
+        *
+        * p4->p7<-p3
+        * v - ^ - v
+        * p8<mp > p6
+        * ^ - v - ^
+        * p1->p5<-p2
+        */
+
+        /*
+         * Next, we need to find and calculate each midpoint and its height of each diamond
+         */
+
+        Vector2[] diamondCorners = new[]
+        {
+             //p5
+             new Vector2(mp.x, p1.y), 
+             // p6
+             new Vector2(p3.x, mp.y),
+             // p7
+             new Vector2(mp.x, p3.y),
+             // p8
+             new Vector2(p1.x, mp.y)
+        };
+
+        foreach (Vector2 v in diamondCorners)
+        {
+            verts.SetHeight(v, AverageHeight(v, mp) + RandomHeight());
+            if (verts.GetHeight(v) > currentMaxHeight)
+           {
+               currentMaxHeight = verts.GetHeight(v);
+           }
+        }
+    }
+```
 A single method was used to find the average height of related points:
 To find the few corner points of interest, a displacement vector between a given corner and the local centre point of the grid is created. The corners are found by adding the deplacement vector with the local centre point, then rotating the displacement vector by 90 degrees after each time. If the inspected point is inside the original grid, its height is then added to a sum, so that the mean of the valid points can be calculated. Thus, the new point's height will equal to the mean height of these points, plus a random value (the range of this random value decreases after every full loop).
 
