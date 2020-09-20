@@ -170,6 +170,7 @@ Left - No median filter, Right - Median filter
   <img src="Images/medianfilter.gif"  width="300" >
 </p>
 
+The median filter works by operating on each vertex after the terrain is generated. For each vertex, the surrounding vertex heights within a certain distance described by a Window Offset and a Window Width are retrieved and stored in a window list. Then the list is sorted and the main vertex is adjusted to the height of the median of the sorted list, the middle element. This will cause the overall terrain to be much smoother. However, due to updating the vertices one by one, a copy of the heightmap must be used to scan the heights while altering the original heightmap, this ensures the vertex heights read are the original and unchanged.
 ```c#
 void MedianFilter()
     {
