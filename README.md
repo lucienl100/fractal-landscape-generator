@@ -66,7 +66,7 @@ This section of code shows the use of a double nested for loop which will inspec
 		}
 ```
 How each 'step' is performed:
-```
+```c#
 void Step(Vector2 p1, Vector2 p3)
 	{
         //  Performs diamond step and square step given an initial square
